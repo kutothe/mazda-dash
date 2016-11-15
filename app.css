@@ -1,0 +1,155 @@
+/**
+ * [balzdash]
+ *
+ * @version: 0.0.1
+ * @author: Harry Balz
+ * @description super simple dash
+ *
+ * [license]
+ */
+
+[app="app.balzdash"] {
+	background-color: #000000;
+}
+
+[app="app.balzdash"] #top-left-con {
+	position: absolute;
+	top: 76px;
+	left: 0;
+	width: 540px;
+	color:rgba(255, 255, 255, 0.9);
+	text-align: center;
+}
+[app="app.balzdash"] #speedometer .value {
+	display: inline-block;
+	font-size: 300px;
+	line-height: 300px;
+}
+[app="app.balzdash"] #speedometer .label {
+	display: inline-block;
+	font-size: 15px;
+	line-height: 15px;
+	text-transform: uppercase;
+	opacity: .4;
+}
+
+
+
+
+[app="app.balzdash"] #top-right-con {
+	position: absolute;
+	top: 40px;
+	right: 55px;
+	color:rgba(255, 255, 255, 0.55);
+	text-align: right;
+}
+[app="app.balzdash"] #time-con {
+	margin-bottom: 22px;
+	font-size: 50px;
+	line-height: 50px;
+	color:rgba(255, 255, 255, 0.85);
+}
+[app="app.balzdash"] #time-con .ampm {
+	font-size: 20px;
+	line-height: 20px;
+	color:rgba(255, 255, 255, 0.55);
+	margin-left: 6px;
+}
+[app="app.balzdash"] #date-con {
+	margin-bottom: 10px;
+}
+
+[app="app.balzdash"] #temperature {
+	position: relative;
+}
+[app="app.balzdash"] #temperature .value {
+	display: inline-block;
+	font-size: 90px;
+	line-height: 90px;
+}
+[app="app.balzdash"] #temperature:after {
+	position: absolute;
+	content: '\00b0';
+	right: 0;
+	top: 6px;
+	font-size: 40px;
+}
+[app="app.balzdash"] #temperature .label {
+	display: inline-block;
+	font-size: 25px;
+	line-height: 25px;
+	text-transform: uppercase;
+	opacity: .5;
+}
+
+[app="app.balzdash"] #heading {
+	margin-top: 25px;
+}
+
+[app="app.balzdash"] #heading .label,
+[app="app.balzdash"] #avg-fuel-cons .label {
+	display: inline-block;
+	margin-right: 8px;
+	font-size: 15px;
+	opacity: .6;
+}
+[app="app.balzdash"] #heading .value,
+[app="app.balzdash"] #avg-fuel-cons .value {
+	display: inline-block;
+	font-size: 20px;
+	line-height: 20px;
+}
+
+
+[app="app.balzdash"] #bottom-right-con {
+	position: absolute;
+	bottom: 54px;
+	right: 15px;
+	color:rgba(255, 255, 255, 0.6);
+	text-align: right;
+	font-size: 20px;
+	line-height: 20px;
+}
+
+
+
+[app="app.balzdash"] #bottom-con {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	height: 40px;
+	background-color: rgba(255, 255, 255, 0.1);
+	color:rgba(255, 255, 255, 0.65);
+}
+[app="app.balzdash"] #bottom-con .fuel-level {
+	position: relative;
+	display: block;
+	background-color: rgba(0, 117, 255, .2);
+	height: 100%;
+	width: 100%;
+	transition: width .3s linear;
+}
+[app="app.balzdash"] #bottom-con .fuel-percentage {
+	position: absolute;
+	left: 45px;
+	top: 11px;
+	font-size: 18px;
+	line-height: 18px;
+	opacity: .8;
+	z-index: 1;
+}
+[app="app.balzdash"] #bottom-con .fuel-icon {
+	position: absolute;
+	left: 10px;
+	top: 9px;
+	width: 22px;
+	height: 22px;
+	background: url(images/fuel.png) no-repeat center center transparent;
+	background-size: 100% 100%;
+	z-index: 2;
+	opacity: .4;
+}
+[app="app.balzdash"] #bottom-con .fuel-level.warning {
+	background-color: rgba(255, 0, 0, .5);
+}
