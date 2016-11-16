@@ -43,7 +43,7 @@
 [app="app.balzdash"] #speedometer .label {
 	display: block;
 	margin-top: -20px;
-	margin-bottom: 40px;
+	margin-bottom: 30px;
 	font-size: 18px;
 	line-height: 18px;
 	text-transform: uppercase;
@@ -72,7 +72,7 @@
 
 [app="app.balzdash"] #top-speed .value,
 [app="app.balzdash"] #avg-speed .value {
-	font-size: 19px;
+	font-size: 24px;
 	opacity: .6;
 }
 
@@ -140,7 +140,7 @@
 	display: inline-block;
 	font-size: 20px;
 	line-height: 20px;
-	width: 30px;
+	width: 40px;
 }
 
 

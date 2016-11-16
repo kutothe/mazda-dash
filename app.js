@@ -683,7 +683,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					var sum = this.fuelLevelQueue.reduce(function(a, b) { return a + b; }),
 						avg = sum / this.fuelLevelQueue.length;
 
-					displayVal = parseInt(DataTransform.scaleValue(avg, [0,255], [0,100]));
+					displayVal = DataTransform.scaleValue(avg, [0,255], [0,100]).toFixed(1);
 					this.fuelLevel.css('width', displayVal+'%');
 					this.fuelPercentage.html(displayVal+'%');
 					this.fuelLevel.toggleClass('warning', displayVal <= 10);
