@@ -562,7 +562,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
             }.bind(this)},
 
             // Temperature: Outside
-            {field: VehicleData.temperature.intake, transform: function(temperature, index) {
+            {field: VehicleData.temperature.outside, transform: function(temperature, index) {
 
                 // For speed we need to transform it to the local region
                 if (this.regions[this.getRegion()].temperatureTransform) {
