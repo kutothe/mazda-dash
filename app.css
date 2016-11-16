@@ -171,7 +171,7 @@
 	display: block;
 	background-color: rgba(0, 117, 255, .2);
 	height: 100%;
-	width: 100%;
+	width: 0;
 	transition: width .4s linear;
 }
 [app="app.balzdash"] #bottom-con .fuel-percentage {

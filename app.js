@@ -182,6 +182,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.timeTicks = 0;
 		this.timeUpdated = false;
 
+		this.fuelLevelQueue = [];
+		this.fuelLevelQueueMax = 50; // max fuel level queue size
+		this.fuelLevelTicks = 0;
+		this.fuelLevelMod = 20; // when to recalculate the fuel level avg
+
 
 		// html elements
 
@@ -666,10 +671,22 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// fuel level
 			case 3:
-				displayVal = parseInt(DataTransform.scaleValue(value, [0,255], [0,100]));
-				this.fuelLevel.css('width', displayVal+'%');
-				this.fuelPercentage.html(displayVal+'%');
-				this.fuelLevel.toggleClass('warning', displayVal <= 10);
+				this.fuelLevelQueue.push(value);
+				if (this.fuelLevelQueue.length > this.fuelLevelQueueMax) {
+					this.fuelLevelQueue.shift();
+				}
+
+				if (this.fuelLevelTicks > 10 && this.fuelLevelTicks % this.fuelLevelMod === 0) {
+					var sum = this.fuelLevelQueue.reduce(function(a, b) { return a + b; }),
+						avg = sum / this.fuelLevelQueue.length;
+
+					displayVal = parseInt(DataTransform.scaleValue(avg, [0,255], [0,100]));
+					this.fuelLevel.css('width', displayVal+'%');
+					this.fuelPercentage.html(displayVal+'%');
+					this.fuelLevel.toggleClass('warning', displayVal <= 10);
+				}
+
+				this.fuelLevelTicks++;
 				break;
 
 			// fuel consumption average
