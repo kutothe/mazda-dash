@@ -653,12 +653,12 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 				if (this.totalSpeedTicks++ % 10 === 0) {
 					// update average speed
-					this.avgSpeedConValue.html(parseInt(this.totalSpeed/this.totalSpeedTicks)+' '+name);
+					this.avgSpeedConValue.html(parseInt(this.totalSpeed/this.totalSpeedTicks));
 				}
 
 				if (value > this.topSpeed) {
 					this.topSpeed = value;
-					this.topSpeedConValue.html(value+' '+name);
+					this.topSpeedConValue.html(value);
 				}
 
 				break;
