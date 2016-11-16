@@ -38,6 +38,7 @@
 	display: block;
 	font-size: 240px;
 	line-height: 240px;
+	opacity: .9;
 }
 [app="app.balzdash"] #speedometer .label {
 	display: block;
