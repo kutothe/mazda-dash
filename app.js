@@ -168,6 +168,15 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	created: function() {
 		var self = this;
 
+		// helper data
+
+		this.daysArray = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
+		this.monthsArray = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
+		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+
+
+		// html elements
+
 		this.topLeftCon = $("<div/>").attr('id', 'top-left-con');
 		this.topRightCon = $("<div/>").attr('id', 'top-right-con');
 		this.bottomRightCon = $("<div/>").attr('id', 'bottom-right-con');
@@ -408,19 +417,16 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 
 	transformHeading: function(heading) {
-		var arr = ["N","NNE","NE","ENE","E","ESE", "SE", "SSE","S","SSW","SW","WSW","W","WNW","NW","NNW"],
-			val = parseInt((heading/22.5)+0.5);
+		var val = parseInt((heading/22.5)+0.5);
 
-		return arr[(val % 16)];
+		return this.headingsArray[(val % 16)];
 	},
 
 
 	updateDateTime: function(timestamp) {
 		var objDate = new Date(timestamp*1000),
-			days = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'],
-			months = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'],
-			dotw = days[objDate.getDay()],
-			month = months[objDate.getMonth()],
+			dotw = this.daysArray[objDate.getDay()],
+			month = this.monthsArray[objDate.getMonth()],
 			d = objDate.getDate(),
 			h = objDate.getHours(),
     		m = objDate.getMinutes(),
