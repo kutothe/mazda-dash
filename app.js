@@ -209,10 +209,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.updateSection(0);
 		this.updateSection(2);
 		this.updateSection(5);
+		this.updateSection(6);
 
 
-		this.updateDateTime();
-		this.updateDateTimeTimer = setInterval(function() { self.updateDateTime(); }, 10000);
+		// this.updateDateTime();
+		// this.updateDateTimeTimer = setInterval(function() { self.updateDateTime(); }, 10000);
 	},
 
 	/**
@@ -268,7 +269,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	terminated: function() {
-		clearInterval(this.updateDateTimeTimer);
+		// clearInterval(this.updateDateTimeTimer);
 	},
 
 
@@ -414,8 +415,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	},
 
 
-	updateDateTime: function() {
-		var objDate = new Date(),
+	updateDateTime: function(timestamp) {
+		var objDate = new Date(timestamp*1000),
 			locale = "en-us",
 			month = objDate.toLocaleString(locale, { month: "short" }),
 			dotw = objDate.toLocaleString(locale, { weekday: "short" }),
@@ -537,6 +538,9 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
             }.bind(this)},
 
+			// GPS Timestamp
+            {field: VehicleData.gps.timestamp, name: 'GPS Timezone'},
+
         ];
 
 
@@ -612,7 +616,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			// fuel level
 			case 3:
 				displayVal = parseInt(DataTransform.scaleValue(value, [0,255], [0,100]));
-				window.Logger.debug('region '+displayVal);
 				this.fuelLevel.css('width', displayVal+'%');
 				this.fuelPercentage.html(displayVal+'%');
 				this.fuelLevel.toggleClass('warning', displayVal <= 10);
@@ -628,6 +631,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			case 5:
 				this.temperatureValue.html(value);
 				this.temperatureLabel.html(name);
+				break;
+
+			// GPS Timezone
+			case 6:
+				this.updateDateTime(value);
 				break;
 
 			default:
