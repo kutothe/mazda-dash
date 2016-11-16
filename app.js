@@ -174,6 +174,14 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.monthsArray = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
 
+		this.totalSpeed = 0;
+		this.totalSpeedTicks = 0;
+
+		this.topSpeed = 0;
+
+		this.timeTicks = 0;
+		this.timeUpdated = false;
+
 
 		// html elements
 
@@ -186,12 +194,20 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.speedometerValue = $("<div/>").addClass('value').html('0').appendTo(this.speedometer);
 		this.speedometerLabel = $("<label/>").addClass('label').appendTo(this.speedometer);
 
+		this.topSpeedCon = $("<div/>").attr('id', 'top-speed').appendTo(this.topLeftCon);
+		this.topSpeedConLabel = $("<label/>").addClass('label').html('Top Speed').appendTo(this.topSpeedCon);
+		this.topSpeedConValue = $("<div/>").addClass('value').html('0').appendTo(this.topSpeedCon);
+
+		this.avgSpeedCon = $("<div/>").attr('id', 'avg-speed').appendTo(this.topLeftCon);
+		this.avgSpeedConLabel = $("<label/>").addClass('label').html('Avg Speed').appendTo(this.avgSpeedCon);
+		this.avgSpeedConValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.avgSpeedCon);
+
 
 		this.timeCon = $("<div/>").attr('id', 'time-con').addClass('invisible').html('&nbsp;').appendTo(this.topRightCon);
 		this.dateCon = $("<div/>").attr('id', 'date-con').addClass('invisible').html('&nbsp;').appendTo(this.topRightCon);
 
 		this.temperature = $("<div/>").attr('id', 'temperature').appendTo(this.topRightCon);
-		this.temperatureValue = $("<div/>").addClass('value').html('0').appendTo(this.temperature);
+		this.temperatureValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.temperature);
 		this.temperatureLabel = $("<label/>").addClass('label').appendTo(this.temperature);
 
 		this.heading = $('<div/>').attr('id', 'heading').appendTo(this.topRightCon);
@@ -200,7 +216,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.avgFuelCons = $('<div/>').attr('id', 'avg-fuel-cons').appendTo(this.topRightCon);
 		this.avgFuelConsLabel = $("<label/>").addClass('label').appendTo(this.avgFuelCons);
-		this.avgFuelConsValue = $("<div/>").addClass('value').html('0').appendTo(this.avgFuelCons);
+		this.avgFuelConsValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.avgFuelCons);
 
 		this.fuelLevel = $('<div/>').addClass('fuel-level').appendTo(this.bottomCon);
 		this.fuelPercentage = $('<div/>').addClass('fuel-percentage').appendTo(this.bottomCon);
@@ -427,26 +443,33 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		var objDate = new Date(timestamp*1000),
 			dotw, month, d, h, m, ap;
 
+		// hack for my timezone atm
+		objDate.setHours(objDate.getHours()-5);
+
 		if (objDate.getFullYear() >= 2016) {
-			dotw = this.daysArray[objDate.getDay()];
-			month = this.monthsArray[objDate.getMonth()];
-			d = objDate.getDate();
-			h = objDate.getHours();
-    		m = objDate.getMinutes();
-			ap = (h <= 11) ? 'AM' : 'PM';
+			if (this.timeTicks++ % 20 === 0 || !this.timeUpdated) {
+				dotw = this.daysArray[objDate.getDay()];
+				month = this.monthsArray[objDate.getMonth()];
+				d = objDate.getDate();
+				h = objDate.getHours();
+	    		m = objDate.getMinutes();
+				ap = (h <= 11) ? 'AM' : 'PM';
 
-			if (h === 0) {
-				h = 12;
-			} else if (h > 12) {
-				h -= 12;
+				if (h === 0) {
+					h = 12;
+				} else if (h > 12) {
+					h -= 12;
+				}
+
+				if (m < 10) {
+					m = '0'+m;
+				}
+
+				this.dateCon.removeClass('invisible').html(dotw+', '+month+' '+this.ordinal_suffix_of(d));
+				this.timeCon.removeClass('invisible').html(h+':'+m+'<span class="ampm">'+ap+'</span>');
+
+				this.timeUpdated = true;
 			}
-
-			if (m < 10) {
-				m = '0'+m;
-			}
-
-			this.dateCon.removeClass('invisible').html(dotw+', '+month+' '+this.ordinal_suffix_of(d));
-			this.timeCon.removeClass('invisible').html(h+':'+m+'<span class="ampm">'+ap+'</span>');
 		}
 	},
 
@@ -615,11 +638,25 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			// MPH
 			case 0:
 				if (this.speedometerValue.html() != value) {
-					this.speedometerValue.stop(true, true).animate({'opacity':0.2}, 150, function() {
-						this.speedometerValue.html(value).stop(true, true).animate({'opacity':1}, 150);
+					this.speedometerValue.stop(true, true).animate({'opacity':0}, 250, function() {
+						this.speedometerValue.html(value).stop(true, true).animate({'opacity':1}, 250);
 					}.bind(this));
 				}
 				this.speedometerLabel.html(name);
+
+				this.totalSpeed += value;
+
+				if (this.totalSpeedTicks++ % 10 === 0)
+				{
+					// update average speed
+					this.avgSpeedConValue.html(parseInt(this.totalSpeed/this.totalSpeedTicks)+' '+name);
+				}
+
+				if (value > this.topSpeed) {
+					this.topSpeed = value;
+					this.topSpeedConValue.html(value+' '+name);
+				}
+
 				break;
 
 			// Heading

@@ -28,25 +28,53 @@
 
 [app="app.balzdash"] #top-left-con {
 	position: absolute;
-	top: 90px;
+	top: 60px;
 	left: 0;
 	width: 540px;
 	color:rgba(255, 255, 255, 0.9);
 	text-align: center;
 }
 [app="app.balzdash"] #speedometer .value {
-	display: inline-block;
-	font-size: 320px;
-	line-height: 320px;
+	display: block;
+	font-size: 240px;
+	line-height: 240px;
 }
 [app="app.balzdash"] #speedometer .label {
-	display: inline-block;
-	font-size: 15px;
-	line-height: 15px;
+	display: block;
+	margin-top: -30px;
+	margin-bottom: 40px;
+	font-size: 16px;
+	line-height: 16px;
 	text-transform: uppercase;
 	opacity: .4;
 }
 
+[app="app.balzdash"] #top-speed,
+[app="app.balzdash"] #avg-speed {
+	display: inline-block;
+}
+[app="app.balzdash"] #top-speed {
+	margin-right: 60px;
+	margin-left: -40px;
+}
+[app="app.balzdash"] #top-speed .label,
+[app="app.balzdash"] #top-speed .value,
+[app="app.balzdash"] #avg-speed .label,
+[app="app.balzdash"] #avg-speed .value, {
+	display: block;
+}
+
+[app="app.balzdash"] #top-speed .label,
+[app="app.balzdash"] #avg-speed .label {
+	font-size: 16px;
+	opacity: .3;
+}
+
+[app="app.balzdash"] #top-speed .value,
+[app="app.balzdash"] #avg-speed .value {
+	font-size: 19px;
+	opacity: .6;
+}
 
 
 
@@ -105,7 +133,7 @@
 [app="app.balzdash"] #avg-fuel-cons .label {
 	display: inline-block;
 	margin-right: 8px;
-	font-size: 15px;
+	font-size: 16px;
 	opacity: .6;
 }
 [app="app.balzdash"] #heading .value,
