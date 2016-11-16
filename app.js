@@ -185,7 +185,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.fuelLevelQueue = [];
 		this.fuelLevelQueueMax = 50; // max fuel level queue size
 		this.fuelLevelTicks = 0;
-		this.fuelLevelMod = 20; // when to recalculate the fuel level avg
+		this.fuelLevelMod = 15; // when to recalculate the fuel level avg
 
 
 		// html elements

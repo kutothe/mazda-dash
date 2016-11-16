@@ -41,10 +41,10 @@
 }
 [app="app.balzdash"] #speedometer .label {
 	display: block;
-	margin-top: -30px;
+	margin-top: -20px;
 	margin-bottom: 40px;
-	font-size: 16px;
-	line-height: 16px;
+	font-size: 18px;
+	line-height: 18px;
 	text-transform: uppercase;
 	opacity: .4;
 }
@@ -55,7 +55,6 @@
 }
 [app="app.balzdash"] #top-speed {
 	margin-right: 60px;
-	margin-left: -40px;
 }
 [app="app.balzdash"] #top-speed .label,
 [app="app.balzdash"] #top-speed .value,
@@ -86,19 +85,18 @@
 	text-align: right;
 }
 [app="app.balzdash"] #time-con {
-	margin-bottom: 22px;
-	font-size: 50px;
-	line-height: 50px;
+	font-size: 60px;
+	line-height: 60px;
 	color:rgba(255, 255, 255, 0.85);
 }
 [app="app.balzdash"] #time-con .ampm {
-	font-size: 20px;
-	line-height: 20px;
+	font-size: 16px;
+	line-height: 16px;
 	color:rgba(255, 255, 255, 0.55);
 	margin-left: 6px;
 }
 [app="app.balzdash"] #date-con {
-	margin-bottom: 10px;
+	margin-bottom: 20px;
 }
 
 [app="app.balzdash"] #temperature {
@@ -106,8 +104,8 @@
 }
 [app="app.balzdash"] #temperature .value {
 	display: inline-block;
-	font-size: 90px;
-	line-height: 90px;
+	font-size: 70px;
+	line-height: 70px;
 	margin-right: 8px;
 }
 [app="app.balzdash"] #temperature:after {
