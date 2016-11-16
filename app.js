@@ -128,7 +128,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         	speedUnit: 'MPH',
 			speedTransform: DataTransform.toMPH,
 			fuelConsUnit: 'AVG MPG',
-			fuelConsTransform: false, // DataTransform.toMPG,
+			fuelConsTransform: DataTransform.toMPG,
         	temperatureUnit: 'f',
 			temperatureTransform: false, // DataTransform.toFahrenheit,
         },
@@ -694,7 +694,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// fuel consumption average
 			case 4:
-				displayVal = (value === 0) ? '&nbsp;' : value;
+				displayVal = (value === 0) ? '&nbsp;' : value/10;
 				this.avgFuelConsValue.html(displayVal);
 				this.avgFuelConsLabel.html(name);
 				break;
