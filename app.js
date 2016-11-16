@@ -643,9 +643,12 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			// MPH
 			case 0:
 				if (this.speedometerValue.html() != value) {
+					/*
 					this.speedometerValue.stop(true, true).animate({'opacity':0}, 250, function() {
 						this.speedometerValue.html(value).stop(true, true).animate({'opacity':1}, 250);
 					}.bind(this));
+					*/
+					this.speedometerValue.html(value);
 				}
 				this.speedometerLabel.html(name);
 
