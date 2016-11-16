@@ -13,6 +13,10 @@
      src: url(fonts/Myriad-Pro_31655.ttf);
  }
 
+[app="app.balzdash"] .invisible {
+	visibility: hidden;
+}
+
 [app="app.balzdash"] {
 	background-color: #000000;
 	-webkit-font-feature-settings: "kern" , "liga" , "pnum";
@@ -76,12 +80,13 @@
 	display: inline-block;
 	font-size: 90px;
 	line-height: 90px;
+	margin-right: 5px;
 }
 [app="app.balzdash"] #temperature:after {
 	position: absolute;
 	content: '\00b0';
 	right: 0;
-	top: 6px;
+	top: 2px;
 	font-size: 40px;
 }
 [app="app.balzdash"] #temperature .label {
@@ -108,6 +113,7 @@
 	display: inline-block;
 	font-size: 20px;
 	line-height: 20px;
+	width: 30px;
 }
 
 

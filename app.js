@@ -623,13 +623,22 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// fuel consumption average
 			case 4:
-				this.avgFuelConsValue.html(value);
+				displayVal = (value === 0) ? '&nbsp;' : value;
+				this.avgFuelConsValue.html(displayVal);
 				this.avgFuelConsLabel.html(name);
 				break;
 
 			// Temperature
 			case 5:
-				this.temperatureValue.html(value);
+				if (value === 255) {
+					this.temperature.addClass('invisible');
+					displayVal =  '&nbsp;';
+				} else {
+					this.temperature.removeClass('invisible');
+					displayVal =  value;
+				}
+
+				this.temperatureValue.html(displayVal);
 				this.temperatureLabel.html(name);
 				break;
 
