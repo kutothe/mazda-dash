@@ -417,9 +417,10 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 	updateDateTime: function(timestamp) {
 		var objDate = new Date(timestamp*1000),
-			locale = "en-us",
-			month = objDate.toLocaleString(locale, { month: "short" }),
-			dotw = objDate.toLocaleString(locale, { weekday: "short" }),
+			days = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'],
+			months = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'],
+			dotw = days[objDate.getDay()],
+			month = months[objDate.getMonth()],
 			d = objDate.getDate(),
 			h = objDate.getHours(),
     		m = objDate.getMinutes(),
