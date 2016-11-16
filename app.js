@@ -187,8 +187,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.speedometerLabel = $("<label/>").addClass('label').appendTo(this.speedometer);
 
 
-		this.timeCon = $("<div/>").attr('id', 'time-con').appendTo(this.topRightCon);
-		this.dateCon = $("<div/>").attr('id', 'date-con').appendTo(this.topRightCon);
+		this.timeCon = $("<div/>").attr('id', 'time-con').addClass('invisible').html('&nbsp;').appendTo(this.topRightCon);
+		this.dateCon = $("<div/>").attr('id', 'date-con').addClass('invisible').html('&nbsp;').appendTo(this.topRightCon);
 
 		this.temperature = $("<div/>").attr('id', 'temperature').appendTo(this.topRightCon);
 		this.temperatureValue = $("<div/>").addClass('value').html('0').appendTo(this.temperature);
@@ -425,25 +425,29 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 	updateDateTime: function(timestamp) {
 		var objDate = new Date(timestamp*1000),
-			dotw = this.daysArray[objDate.getDay()],
-			month = this.monthsArray[objDate.getMonth()],
-			d = objDate.getDate(),
-			h = objDate.getHours(),
-    		m = objDate.getMinutes(),
+			dotw, month, d, h, m, ap;
+
+		if (objDate.getFullYear() >= 2016) {
+			dotw = this.daysArray[objDate.getDay()];
+			month = this.monthsArray[objDate.getMonth()];
+			d = objDate.getDate();
+			h = objDate.getHours();
+    		m = objDate.getMinutes();
 			ap = (h <= 11) ? 'AM' : 'PM';
 
-		if (h === 0) {
-			h = 12;
-		} else if (h > 12) {
-			h -= 12;
-		}
+			if (h === 0) {
+				h = 12;
+			} else if (h > 12) {
+				h -= 12;
+			}
 
-		if (m < 10) {
-			m = '0'+m;
-		}
+			if (m < 10) {
+				m = '0'+m;
+			}
 
-		this.dateCon.html(dotw+', '+month+' '+this.ordinal_suffix_of(d));
-		this.timeCon.html(h+':'+m+'<span class="ampm">'+ap+'</span>');
+			this.dateCon.removeClass('invisible').html(dotw+', '+month+' '+this.ordinal_suffix_of(d));
+			this.timeCon.removeClass('invisible').html(h+':'+m+'<span class="ampm">'+ap+'</span>');
+		}
 	},
 
 

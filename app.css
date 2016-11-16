@@ -80,7 +80,7 @@
 	display: inline-block;
 	font-size: 90px;
 	line-height: 90px;
-	margin-right: 5px;
+	margin-right: 8px;
 }
 [app="app.balzdash"] #temperature:after {
 	position: absolute;
