@@ -8,13 +8,23 @@
  * [license]
  */
 
+ @font-face {
+     font-family: myriadPro;
+     src: url(fonts/Myriad-Pro_31655.ttf);
+ }
+
 [app="app.balzdash"] {
 	background-color: #000000;
+	-webkit-font-feature-settings: "kern" , "liga" , "pnum";
+	font-feature-settings: "kern" , "liga" , "pnum";
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	font-family: "Myriad Pro",myriadPro,"Helvetica","Roboto","Arial",sans-serif;
 }
 
 [app="app.balzdash"] #top-left-con {
 	position: absolute;
-	top: 76px;
+	top: 90px;
 	left: 0;
 	width: 540px;
 	color:rgba(255, 255, 255, 0.9);
