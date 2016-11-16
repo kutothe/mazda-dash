@@ -646,8 +646,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 				this.totalSpeed += value;
 
-				if (this.totalSpeedTicks++ % 10 === 0)
-				{
+				if (this.totalSpeedTicks++ % 10 === 0) {
 					// update average speed
 					this.avgSpeedConValue.html(parseInt(this.totalSpeed/this.totalSpeedTicks)+' '+name);
 				}
