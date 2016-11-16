@@ -610,7 +610,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		switch (sectionIndex) {
 			// MPH
 			case 0:
-				this.speedometerValue.html(value);
+				if (this.speedometerValue.text() != value) {
+					this.speedometerValue.fadeOut(150, function() {
+						this.speedometerValue.html(value).fadeIn(150);
+					}.bind(this));
+				}
 				this.speedometerLabel.html(name);
 				break;
 
