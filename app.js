@@ -215,10 +215,10 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.createSections();
 
-		this.updateSection(0);
-		this.updateSection(2);
-		this.updateSection(5);
-		this.updateSection(6);
+		// this.updateSection(0);
+		// this.updateSection(2);
+		// this.updateSection(5);
+		// this.updateSection(6);
 
 
 		// this.updateDateTime();
@@ -610,9 +610,9 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		switch (sectionIndex) {
 			// MPH
 			case 0:
-				if (this.speedometerValue.text() != value) {
-					this.speedometerValue.fadeOut(150, function() {
-						this.speedometerValue.html(value).fadeIn(150);
+				if (this.speedometerValue.html() != value) {
+					this.speedometerValue.stop(true, true).animate({'opacity':0.2}, 150, function() {
+						this.speedometerValue.html(value).stop(true, true).animate({'opacity':1}, 150);
 					}.bind(this));
 				}
 				this.speedometerLabel.html(name);
