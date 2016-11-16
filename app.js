@@ -574,7 +574,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         if (sectionIndex < 0 || sectionIndex >= this.sections.length) return false;
 
 		var section = this.sections[sectionIndex],
-            name = section.name;
+            name = section.name,
+			displayVal;
 
 
 		if (value === undefined) {
@@ -610,9 +611,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// fuel level
 			case 3:
-				this.fuelLevel.css('width', value+'%');
-				this.fuelPercentage.html(value+'%');
-				this.fuelLevel.toggleClass('warning', value <= 10);
+				displayVal = parseInt(DataTransform.scaleValue(value, [0,255], [0,100]));
+				window.Logger.debug('region '+displayVal);
+				this.fuelLevel.css('width', displayVal+'%');
+				this.fuelPercentage.html(displayVal+'%');
+				this.fuelLevel.toggleClass('warning', displayVal <= 10);
 				break;
 
 			// fuel consumption average

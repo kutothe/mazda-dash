@@ -32,8 +32,8 @@
 }
 [app="app.balzdash"] #speedometer .value {
 	display: inline-block;
-	font-size: 300px;
-	line-height: 300px;
+	font-size: 320px;
+	line-height: 320px;
 }
 [app="app.balzdash"] #speedometer .label {
 	display: inline-block;
@@ -138,7 +138,7 @@
 	background-color: rgba(0, 117, 255, .2);
 	height: 100%;
 	width: 100%;
-	transition: width .3s linear;
+	transition: width .4s linear;
 }
 [app="app.balzdash"] #bottom-con .fuel-percentage {
 	position: absolute;
