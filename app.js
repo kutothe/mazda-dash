@@ -221,11 +221,14 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.temperatureValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.temperature);
 		this.temperatureLabel = $("<label/>").addClass('label').appendTo(this.temperature);
 
-		this.heading = $('<div/>').attr('id', 'heading').appendTo(this.topRightCon);
-		this.headingLabel = $("<label/>").addClass('label').appendTo(this.heading);
+
+		this.additionalStats = $('<div/>').attr('id', 'additional-stats').appendTo(this.topRightCon);
+
+		this.heading = $('<div/>').attr('id', 'heading').appendTo(this.additionalStats);
+		this.headingLabel = $("<label/>").addClass('label').html('Heading').appendTo(this.heading);
 		this.headingValue = $("<div/>").addClass('value').html('N').appendTo(this.heading);
 
-		this.avgFuelCons = $('<div/>').attr('id', 'avg-fuel-cons').appendTo(this.topRightCon);
+		this.avgFuelCons = $('<div/>').attr('id', 'avg-fuel-cons').appendTo(this.additionalStats);
 		this.avgFuelConsLabel = $("<label/>").addClass('label').appendTo(this.avgFuelCons);
 		this.avgFuelConsValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.avgFuelCons);
 
@@ -536,17 +539,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
             {field: VehicleData.vehicle.rpm, name: 'RPM'},
 
             // GPS Heading
-            {field: VehicleData.gps.heading, transform: function(heading, index) {
-
-				heading	= this.transformHeading(heading);
-
-                // return the new value and name
-                return {
-                    value: heading,
-                    name: 'Heading'
-                };
-
-            }.bind(this)},
+            {field: VehicleData.gps.heading, name: 'Heading'},
 
             // Fuel Level
             {field: VehicleData.fuel.position, name: 'Fuel Level'},
@@ -674,8 +667,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// Heading
 			case 2:
-				this.headingValue[0].innerHTML = value;
-				this.headingLabel[0].innerHTML = name;
+				displayVal	= this.transformHeading(value);
+				this.headingValue[0].innerHTML = displayVal;
 				break;
 
 			// fuel level
@@ -689,7 +682,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					var sum = this.fuelLevelQueue.reduce(function(a, b) { return a + b; }),
 						avg = sum / this.fuelLevelQueue.length;
 
-					displayVal = DataTransform.scaleValue(avg, [0,255], [0,100]).toFixed(1);
+					displayVal = DataTransform.scaleValue(avg, [0,182], [0,100]).toFixed(1);
 					this.fuelLevel.css('width', displayVal+'%');
 					this.fuelPercentage[0].innerHTML = displayVal+'%';
 					this.fuelLevel.toggleClass('warning', displayVal <= 10);
