@@ -273,9 +273,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		// this.updateSection(2);
 		// this.updateSection(5);
 		// this.updateSection(6);
-
-
-		window.Logger.debug('created done');
 	},
 
 	/**
@@ -293,9 +290,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	focused: function() {
 		var self = this;
 
-
 		this.updateTripTimer = setInterval(function() { self.updateTripTime(); }, 1000);
-		window.Logger.debug('focused done');
 	},
 
 
@@ -312,7 +307,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	lost: function() {
-		// clearInterval(this.updateDateTimeTimer);
 		clearInterval(this.updateTripTimer);
 	},
 
