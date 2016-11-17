@@ -60,7 +60,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		 * (title) The title of the application in the Application menu
 		 */
 
-		title: 'Info',
+		title: 'MultiDash',
 
 		/**
 		 * (statusbar) Defines if the statusbar should be shown
