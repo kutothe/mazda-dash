@@ -127,7 +127,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         na: {
         	speedUnit: 'MPH',
 			speedTransform: DataTransform.toMPH,
-			fuelConsUnit: 'AVG MPG',
+			fuelConsUnit: 'Avg MPG',
 			fuelConsTransform: DataTransform.toMPG,
         	temperatureUnit: 'f',
 			temperatureTransform: false, // DataTransform.toFahrenheit,
