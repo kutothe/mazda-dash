@@ -209,7 +209,7 @@
 [app="app.balzdash"] #altitude .value,
 [app="app.balzdash"] #trip-time .value {
 	float: right;
-	width: 50px;
+	width: 75px;
 	clear: right;
 }
 [app="app.balzdash"] #altitude .unit {
