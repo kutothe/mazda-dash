@@ -489,11 +489,43 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	},
 
 
+	/*
 	getFuelLevel: function() {
 		var sum = this.fuelLevelQueue.reduce(function(a, b) { return a + b; }),
 			avg = sum / this.fuelLevelQueue.length;
 
 		return Math.round(DataTransform.scaleValue(avg, [0,this.fuelLevelMax], [0,100]));
+	},
+	*/
+
+	/*
+	* http://stackoverflow.com/a/3783970/867676
+	*/
+	getFuelLevel: function() {
+		var store = this.fuelLevelQueue,
+			frequency = {}, // array of frequency.
+			max = 0, // holds the max frequency.
+			result, // holds the max frequency element.
+			use_mode = true,
+			sum, avg, retval;
+
+		for (var v in store) {
+		    frequency[store[v]]=(frequency[store[v]] || 0)+1; // increment frequency.
+		    if(frequency[store[v]] > max) { // is this frequency > max so far ?
+		        max = frequency[store[v]];  // update max.
+		        result = store[v];          // update result.
+		    }
+		}
+
+		if (use_mode) {
+			retval = Math.round(DataTransform.scaleValue(result, [0,this.fuelLevelMax], [0,100]));
+		} else {
+			sum = store.reduce(function(a, b) { return a + b; }) + (result*max);
+			avg = sum / (store.length+max);
+			retval =  Math.round(DataTransform.scaleValue(avg, [0,this.fuelLevelMax], [0,100]));
+		}
+
+		return retval;
 	},
 
 
