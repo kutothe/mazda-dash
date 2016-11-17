@@ -191,7 +191,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.fuelLevelQueue = [];
 		this.fuelLevelQueueMax = 50; // max fuel level queue size
 		this.fuelLevelTicks = 0;
-		this.fuelLevelMod = 15; // when to recalculate the fuel level avg
+		this.fuelLevelMod = 10; // when to recalculate the fuel level avg
 		this.fuelLevelMax = 186; // tested on 2016 Mazda3 Hatchback
 
 
@@ -502,16 +502,17 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	* http://stackoverflow.com/a/3783970/867676
 	*/
 	getFuelLevel: function() {
-		var store = this.fuelLevelQueue,
+		var store = this.fuelLevelQueue.slice(),
 			frequency = {}, // array of frequency.
 			max = 0, // holds the max frequency.
 			result, // holds the max frequency element.
-			use_mode = true,
-			sum, avg, retval;
+			use_mode = false,
+			trim_range = 15,
+			sum, avg, i, retval;
 
 		for (var v in store) {
-		    frequency[store[v]]=(frequency[store[v]] || 0)+1; // increment frequency.
-		    if(frequency[store[v]] > max) { // is this frequency > max so far ?
+		    frequency[store[v]] = (frequency[store[v]] || 0) + 1; // increment frequency.
+		    if (frequency[store[v]] > max) { // is this frequency > max so far ?
 		        max = frequency[store[v]];  // update max.
 		        result = store[v];          // update result.
 		    }
@@ -520,12 +521,21 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		if (use_mode) {
 			retval = Math.round(DataTransform.scaleValue(result, [0,this.fuelLevelMax], [0,100]));
 		} else {
+			// remove values that aren't within the trim_range of the result
+			i = store.length;
+			while (i--) {
+				if (Math.abs(result - store[i]) > trim_range) {
+					store.splice(i, 1);
+				}
+			}
+
+			// give additional weight to the result value by essentially adding it 2 times as many
 			sum = store.reduce(function(a, b) { return a + b; }) + (result*max);
-			avg = sum / (store.length+max);
-			retval =  Math.round(DataTransform.scaleValue(avg, [0,this.fuelLevelMax], [0,100]));
+
+			retval =  sum / (store.length+max);
 		}
 
-		return retval;
+		return Math.min(100, Math.round(DataTransform.scaleValue(retval, [0,this.fuelLevelMax], [0,100])));
 	},
 
 
