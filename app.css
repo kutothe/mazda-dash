@@ -96,6 +96,17 @@
 	color:rgba(255, 255, 255, 0.55);
 	text-align: right;
 }
+[app="app.balzdash"] #time-con,
+[app="app.balzdash"] #date-con {
+	opacity: 0;
+	transform: scale(.9);
+	transition: opacity .6s linear, transform .4s linear;
+}
+[app="app.balzdash"] #time-con.shown,
+[app="app.balzdash"] #date-con.shown {
+	opacity: 1;
+	transform: scale(1);
+}
 [app="app.balzdash"] #time-con {
 	font-size: 60px;
 	line-height: 60px;

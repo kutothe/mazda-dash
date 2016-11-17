@@ -228,8 +228,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 
 
-		this.timeCon = $("<div/>").attr('id', 'time-con').addClass('invisible').html('&nbsp;').appendTo(this.topRightCon);
-		this.dateCon = $("<div/>").attr('id', 'date-con').addClass('invisible').html('&nbsp;').appendTo(this.topRightCon);
+		this.timeCon = $("<div/>").attr('id', 'time-con').html('&nbsp;').appendTo(this.topRightCon);
+		this.dateCon = $("<div/>").attr('id', 'date-con').html('&nbsp;').appendTo(this.topRightCon);
 
 		this.temperature = $("<div/>").attr('id', 'temperature').appendTo(this.topRightCon);
 		this.temperatureValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.temperature);
@@ -499,10 +499,13 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					m = '0'+m;
 				}
 
-				this.dateCon.removeClass('invisible')[0].innerHTML = dotw+', '+month+' '+this.ordinal_suffix_of(d);
-				this.timeCon.removeClass('invisible')[0].innerHTML = h+':'+m+'<span class="ampm">'+ap+'</span>';
+				this.dateCon[0].innerHTML = dotw+', '+month+' '+this.ordinal_suffix_of(d);
+				this.timeCon[0].innerHTML = h+':'+m+'<span class="ampm">'+ap+'</span>';
 
-				this.timeUpdated = true;
+				if (!this.timeUpdated) {
+					this.timeUpdated = true;
+					setTimeout(function() {this.dateCon.add(this.timeCon).addClass('shown');}.bind(this), 100);
+				}
 			}
 		}
 	},
