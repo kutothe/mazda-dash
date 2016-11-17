@@ -140,7 +140,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         eu: {
 			speedUnit: 'KM/H',
 			speedTransform: false,
-			fuelConsUnit: 'AVG L/100km',
+			fuelConsUnit: 'Avg L/100km',
 			fuelConsTransform: false,
         	temperatureUnit: 'c',
 			temperatureTransform: false,
