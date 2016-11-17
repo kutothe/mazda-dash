@@ -40,10 +40,10 @@
 	color: rgb(79, 166, 246);
 }
 [app="app.balzdash"].theme-green {
-	color: rgb(64, 250, 94);
+	color: rgb(0, 227, 36);
 }
 [app="app.balzdash"].theme-red {
-	color: rgb(255, 59, 59);
+	color: rgb(255, 0, 0);
 }
 [app="app.balzdash"].theme-purple {
 	color: rgb(151, 64, 250);
