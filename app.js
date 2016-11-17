@@ -845,8 +845,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// GPS Timezone
 			case 7:
-				this.altitudeValue[0].innerHTML = value;
-				this.altitudeLabel[0].innerHTML = 'Altitude ('+name+')';
+				this.altitudeValue[0].innerHTML = value+'<span class="unit">'+name+'</span>';
+				this.altitudeLabel[0].innerHTML = 'Altitude';
 				break;
 
 			default:
