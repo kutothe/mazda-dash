@@ -198,7 +198,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.timeUpdated = false;
 
 		this.fuelLevelQueue = [];
-		this.fuelLevelQueueMax = 50; // max fuel level queue size
+		this.fuelLevelQueueMax = 60; // max fuel level queue size
 		this.fuelLevelTicks = 0;
 		this.fuelLevelMod = 10; // when to recalculate the fuel level avg
 		this.fuelLevelMax = 186; // tested on 2016 Mazda3 Hatchback
@@ -553,13 +553,17 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	* http://stackoverflow.com/a/3783970/867676
 	*/
 	getFuelLevel: function() {
-		var store = this.fuelLevelQueue.slice(),
+		var store = this.fuelLevelQueue.slice(), // clone the array
 			frequency = {}, // array of frequency.
 			max = 0, // holds the max frequency.
 			result, // holds the max frequency element.
 			use_mode = false,
 			trim_range = 15,
+			weight = 2,
 			sum, avg, i, retval;
+
+		// for easy testing
+		// store = [186, 186, 173, 161, 173, 186, 180, 186, 186, 173, 161, 173, 186, 180, 186, 186, 173, 161, 173, 186, 180, 186, 186, 173, 161, 173, 186, 180, 186, 186, 173, 161, 173, 186, 180];
 
 		for (var v in store) {
 		    frequency[store[v]] = (frequency[store[v]] || 0) + 1; // increment frequency.
@@ -581,9 +585,9 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			}
 
 			// give additional weight to the result value by essentially adding it 2 times as many
-			sum = store.reduce(function(a, b) { return a + b; }) + (result*max);
+			sum = store.reduce(function(a, b) { return a + b; }) + (result*max*weight);
 
-			retval =  sum / (store.length+max);
+			retval =  sum / (store.length+(max*weight));
 		}
 
 		return Math.min(100, Math.round(DataTransform.scaleValue(retval, [0,this.fuelLevelMax], [0,100])));
@@ -796,7 +800,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					this.fuelLevelQueue.shift();
 				}
 
-				if (this.fuelLevelTicks > 10 && this.fuelLevelTicks % this.fuelLevelMod === 0) {
+				// this.fuelLevelTicks = this.fuelLevelMod;
+				if (this.fuelLevelTicks >= this.fuelLevelMod && this.fuelLevelTicks % this.fuelLevelMod === 0) {
 					displayVal = this.getFuelLevel();
 					this.fuelLevel.css('width', displayVal+'%');
 					this.fuelPercentage[0].innerHTML = displayVal+'%';
