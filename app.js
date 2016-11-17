@@ -152,6 +152,17 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
     },
 
 
+	/**
+     * (config)
+     *
+     * An object that holds tweakable config values
+     */
+
+    config: {
+		timezoneOffset: -5
+	},
+
+
 	/***
 	 *** Application Life Cycles
 	 ***/
@@ -178,9 +189,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		DataTransform.toFeet = function(value) {
 			return Math.round(value * 3.28084);
 		};
-
-		// config
-		this.timezoneOffset = -5;
 
 
 		// helper data
@@ -507,7 +515,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			dotw, month, d, h, m, ap;
 
 		// hack for my timezone atm
-		objDate.setHours(objDate.getHours()+this.timezoneOffset);
+		objDate.setHours(objDate.getHours()+this.config.timezoneOffset);
 
 		if (objDate.getFullYear() >= 2016) {
 			if (this.timeTicks++ % 15 === 0 || !this.timeUpdated) {
