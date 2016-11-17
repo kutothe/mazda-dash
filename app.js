@@ -170,9 +170,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	created: function() {
-		var self = this;
-
-
 		// add helper function to DataTransform
 
 		DataTransform.toCelsius = function(value) {
@@ -205,6 +202,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.fuelLevelTicks = 0;
 		this.fuelLevelMod = 10; // when to recalculate the fuel level avg
 		this.fuelLevelMax = 186; // tested on 2016 Mazda3 Hatchback
+
+		this.tripStartTime = new Date();
 
 
 		// html elements
@@ -250,6 +249,10 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.altitudeValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.altitude);
 		this.altitudeLabel = $("<label/>").addClass('label').html('Altitude').appendTo(this.altitude);
 
+		this.tripTime = $("<div/>").attr('id', 'altitude').appendTo(this.additionalStats);
+		this.tripTimeValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.tripTime);
+		this.tripTimeLabel = $("<label/>").addClass('label').html('Trip Time').appendTo(this.tripTime);
+
 
 		this.fuelLevel = $('<div/>').addClass('fuel-level').appendTo(this.bottomCon);
 		this.fuelPercentage = $('<div/>').addClass('fuel-percentage').appendTo(this.bottomCon);
@@ -264,14 +267,15 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.createSections();
 
+		this.updateTripTime();
+
 		// this.updateSection(0);
 		// this.updateSection(2);
 		// this.updateSection(5);
 		// this.updateSection(6);
 
 
-		// this.updateDateTime();
-		// this.updateDateTimeTimer = setInterval(function() { self.updateDateTime(); }, 10000);
+		window.Logger.debug('created done');
 	},
 
 	/**
@@ -287,7 +291,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	focused: function() {
+		var self = this;
 
+
+		this.updateTripTimer = setInterval(function() { self.updateTripTime(); }, 1000);
+		window.Logger.debug('focused done');
 	},
 
 
@@ -304,7 +312,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	lost: function() {
-
+		// clearInterval(this.updateDateTimeTimer);
+		clearInterval(this.updateTripTimer);
 	},
 
 
@@ -327,7 +336,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	terminated: function() {
-		// clearInterval(this.updateDateTimeTimer);
+
 	},
 
 
@@ -472,6 +481,23 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		return this.headingsArray[(val % 16)];
 	},
 
+	updateTripTime: function() {
+		var now = new Date(),
+			diff = this.tripStartTime - now,
+			diffH = Math.round((diff % 86400000) / 3600000),
+			diffM = Math.round(((diff % 86400000) % 3600000) / 60000),
+			diffS = Math.round(((diff % 86400000) % 216000000) / 60000),
+			text = diffM+'m';
+
+		if (diffM === 0 && diffH === 0) {
+			text = diffS+'s';
+		} else if (diffH > 0) {
+			text = diffH+'h '+text;
+		}
+
+		this.tripTimeValue[0].innerHTML = text;
+
+	},
 
 	updateDateTime: function(timestamp) {
 		var objDate = new Date(timestamp*1000),
