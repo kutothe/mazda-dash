@@ -168,11 +168,17 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	created: function() {
 		var self = this;
 
+
 		// add helper function to DataTransform
 
 		DataTransform.toCelsius = function(value) {
 			return Math.round((value - 32) * 5 / 9);
 		};
+
+
+		// config
+		this.timezoneOffset = -5;
+
 
 		// helper data
 
@@ -459,7 +465,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			dotw, month, d, h, m, ap;
 
 		// hack for my timezone atm
-		objDate.setHours(objDate.getHours()-5);
+		objDate.setHours(objDate.getHours()+this.timezoneOffset);
 
 		if (objDate.getFullYear() >= 2016) {
 			if (this.timeTicks++ % 15 === 0 || !this.timeUpdated) {
