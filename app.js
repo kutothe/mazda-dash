@@ -203,6 +203,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.totalSpeedTicks = 0;
 
 		this.topSpeed = 0;
+		this.avgSpeed = 0;
 
 		this.timeTicks = 0;
 		this.timeUpdated = false;
@@ -216,6 +217,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.updateTripTimerInterval = 1000;
 
 
+		region = this.regions[this.getRegion()];
+
 		// html elements
 
 		this.mainContainer = $('<div/>').attr('id', 'main-container');
@@ -225,7 +228,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.speedometer = $("<div/>").attr('id', 'speedometer').appendTo(this.topLeftCon);
 		this.speedometerValue = $("<div/>").addClass('value').html('0').appendTo(this.speedometer);
-		this.speedometerLabel = $("<label/>").addClass('label').appendTo(this.speedometer);
+		this.speedometerLabel = $("<label/>").addClass('label').html(region.speedUnit).appendTo(this.speedometer);
 
 		this.topSpeedCon = $("<div/>").attr('id', 'top-speed').appendTo(this.topLeftCon);
 		this.topSpeedConLabel = $("<label/>").addClass('label').html('Top Speed').appendTo(this.topSpeedCon);
@@ -242,7 +245,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.temperature = $("<div/>").attr('id', 'temperature').appendTo(this.topRightCon);
 		this.temperatureValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.temperature);
-		this.temperatureLabel = $("<label/>").addClass('label').appendTo(this.temperature);
+		this.temperatureLabel = $("<label/>").addClass('label').html(region.temperatureUnit).appendTo(this.temperature);
 
 
 		this.additionalStats = $('<div/>').attr('id', 'additional-stats').appendTo(this.topRightCon);
@@ -253,7 +256,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.avgFuelCons = $('<div/>').attr('id', 'avg-fuel-cons').appendTo(this.additionalStats);
 		this.avgFuelConsValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.avgFuelCons);
-		this.avgFuelConsLabel = $("<label/>").addClass('label').appendTo(this.avgFuelCons);
+		this.avgFuelConsLabel = $("<label/>").addClass('label').html(region.fuelConsUnit).appendTo(this.avgFuelCons);
 
 		this.altitude = $("<div/>").attr('id', 'altitude').appendTo(this.additionalStats);
 		this.altitudeValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.altitude);
@@ -389,15 +392,29 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
      * Called when the region is changed
      */
 
-     onRegionChange: function(region) {
+    onRegionChange: function(region) {
+		var curRegion = this.regions[this.getRegion()];
 
-        // let's just refresh our current section
+		/*
+		speedUnit: 'MPH',
+		speedTransform: DataTransform.toMPH,
+		fuelConsUnit: 'Avg MPG',
+		fuelConsTransform: DataTransform.toMPG,
+		temperatureUnit: 'f',
+		temperatureTransform: false, // DataTransform.toFahrenheit,
+		altitudeUnit: 'ft',
+		altitudeTransform: DataTransform.toFeet
+		*/
+
+		this.speedometerLabel[0].innerHTML = curRegion.speedUnit;
+		this.avgFuelConsLabel[0].innerHTML = curRegion.fuelConsUnit;
+		this.temperatureLabel[0].innerHTML = curRegion.temperatureUnit;
+
 		this.updateSection(0);
 		this.updateSection(4);
 		this.updateSection(5);
 		this.updateSection(7);
-
-     },
+	},
 
 
 	/**
@@ -640,20 +657,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         this.sections = [
 
             // Vehicle speed
-            {field: VehicleData.vehicle.speed, transform: function(value, index) {
-
-                // For speed we need to transform it to the local region
-                if (this.regions[this.getRegion()].speedTransform) {
-                    value = this.regions[this.getRegion()].speedTransform(value);
-                }
-
-                // return the new value and name
-                return {
-                    value: value,
-                    name: this.regions[this.getRegion()].speedUnit
-                };
-
-            }.bind(this)},
+            {field: VehicleData.vehicle.speed, name: 'Speed'},
 
             // Vehicle RPM
             {field: VehicleData.vehicle.rpm, name: 'RPM'},
@@ -665,55 +669,16 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
             {field: VehicleData.fuel.position, name: 'Fuel Level'},
 
             // Average Consumption
-            {field: VehicleData.fuel.averageconsumption, transform: function(value, index) {
-
-                // For speed we need to transform it to the local region
-                if (this.regions[this.getRegion()].fuelConsTransform) {
-                    value = this.regions[this.getRegion()].fuelConsTransform(value);
-                }
-
-                // return the new value and name
-                return {
-                    value: value,
-                    name: this.regions[this.getRegion()].fuelConsUnit
-                };
-
-            }.bind(this)},
+            {field: VehicleData.fuel.averageconsumption, name: 'Average Consumption'},
 
             // Temperature: Outside
-            {field: VehicleData.temperature.outside, transform: function(value, index) {
-
-                // For speed we need to transform it to the local region
-                if (this.regions[this.getRegion()].temperatureTransform) {
-                    value = this.regions[this.getRegion()].temperatureTransform(value);
-                }
-
-                // return the new value and name
-                return {
-                    value: value,
-                    name: this.regions[this.getRegion()].temperatureUnit
-                };
-
-            }.bind(this)},
+            {field: VehicleData.temperature.outside, name: 'Temperature Outside'},
 
 			// GPS Timestamp
             {field: VehicleData.gps.timestamp, name: 'GPS Timezone'},
 
 			// GPS Altitude
-            {field: VehicleData.gps.altitude, transform: function(value, index) {
-
-                // For speed we need to transform it to the local region
-                if (this.regions[this.getRegion()].altitudeTransform) {
-                    value = this.regions[this.getRegion()].altitudeTransform(value);
-                }
-
-                // return the new value and name
-                return {
-                    value: value,
-                    name: this.regions[this.getRegion()].altitudeUnit
-                };
-
-            }.bind(this)},
+            {field: VehicleData.gps.altitude, name: 'GPS Altitude'},
 
         ];
 
@@ -753,6 +718,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		var section = this.sections[sectionIndex],
             name = section.name,
+			curRegion = this.regions[this.getRegion()],
+			refreshOnly = (value === undefined),
 			displayVal;
 
 
@@ -762,43 +729,47 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		section.value = value;
 
-		if (this.is.fn(section.transform)) {
-			// execute the transform
-            var result = section.transform(value, sectionIndex);
-
-			// set the updated value
-            value = result.value || 0;
-
-            // also set the name if necessary
-            name = result.name || name;
-        }
-
 
 		switch (sectionIndex) {
 			// MPH
 			case 0:
-				if (this.speedometerValue[0].innerHTML != value) {
-					/*
-					this.speedometerValue.stop(true, true).animate({'opacity':0}, 250, function() {
-						this.speedometerValue.html(value).stop(true, true).animate({'opacity':1}, 250);
-					}.bind(this));
-					*/
-					this.speedometerValue[0].innerHTML = value;
-				}
-				this.speedometerLabel[0].innerHTML = name;
-
-				this.totalSpeed += value;
-
-				if (this.totalSpeedTicks++ % 10 === 0) {
-					// update average speed
-					this.avgSpeedConValue[0].innerHTML = parseInt(this.totalSpeed/this.totalSpeedTicks);
+				displayVal = value;
+				if (curRegion.speedTransform) {
+					displayVal = curRegion.speedTransform(value);
 				}
 
-				if (value > this.topSpeed) {
-					this.topSpeed = value;
-					this.topSpeedConValue[0].innerHTML = value;
-				}
+				this.speedometerValue[0].innerHTML = displayVal;
 
+				if (!refreshOnly) {
+					this.totalSpeed += value;
+
+					if (this.totalSpeedTicks++ % 10 === 0) {
+						// update average speed
+						this.avgSpeed = Math.round(this.totalSpeed/this.totalSpeedTicks);
+						if (curRegion.speedTransform) {
+							this.avgSpeedConValue[0].innerHTML = curRegion.speedTransform(this.avgSpeed);
+						} else {
+							this.avgSpeedConValue[0].innerHTML = this.avgSpeed;
+						}
+					}
+
+					if (value > this.topSpeed) {
+						this.topSpeed = value;
+						if (curRegion.speedTransform) {
+							this.topSpeedConValue[0].innerHTML = curRegion.speedTransform(value);
+						} else {
+							this.topSpeedConValue[0].innerHTML = value;
+						}
+					}
+				} else {
+					if (curRegion.speedTransform) {
+						this.avgSpeedConValue[0].innerHTML = curRegion.speedTransform(this.avgSpeed);
+						this.topSpeedConValue[0].innerHTML = curRegion.speedTransform(this.topSpeed);
+					} else {
+						this.avgSpeedConValue[0].innerHTML = this.avgSpeed;
+						this.topSpeedConValue[0].innerHTML = this.topSpeed;
+					}
+				}
 				break;
 
 			// Heading
@@ -827,9 +798,16 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// fuel consumption average
 			case 4:
-				displayVal = (value === 0) ? '&nbsp;' : value/10;
+				displayVal = value;
+				if (displayVal === 0) {
+					displayVal = '&nbsp;';
+				} else {
+					if (curRegion.fuelConsTransform) {
+						displayVal = curRegion.fuelConsTransform(displayVal);
+					}
+					displayVal = displayVal/10;
+				}
 				this.avgFuelConsValue[0].innerHTML = displayVal;
-				this.avgFuelConsLabel[0].innerHTML = name;
 				break;
 
 			// Temperature
@@ -840,10 +818,12 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 				} else {
 					this.temperature.removeClass('invisible');
 					displayVal =  value;
+					if (curRegion.temperatureTransform) {
+						displayVal = curRegion.temperatureTransform(displayVal);
+					}
 				}
 
 				this.temperatureValue[0].innerHTML = displayVal;
-				this.temperatureLabel[0].innerHTML = name;
 				break;
 
 			// GPS Timezone
@@ -853,8 +833,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 			// GPS Timezone
 			case 7:
-				this.altitudeValue[0].innerHTML = value+'<span class="unit">'+name+'</span>';
-				this.altitudeLabel[0].innerHTML = 'Altitude';
+				displayVal = value;
+				if (curRegion.altitudeTransform) {
+					displayVal = curRegion.altitudeTransform(displayVal);
+				}
+				this.altitudeValue[0].innerHTML = displayVal+'<span class="unit">'+curRegion.altitudeUnit+'</span>';
 				break;
 
 			default:
