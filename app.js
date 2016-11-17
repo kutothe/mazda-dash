@@ -458,7 +458,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		objDate.setHours(objDate.getHours()-5);
 
 		if (objDate.getFullYear() >= 2016) {
-			if (this.timeTicks++ % 20 === 0 || !this.timeUpdated) {
+			if (this.timeTicks++ % 15 === 0 || !this.timeUpdated) {
 				dotw = this.daysArray[objDate.getDay()];
 				month = this.monthsArray[objDate.getMonth()];
 				d = objDate.getDate();
@@ -476,8 +476,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					m = '0'+m;
 				}
 
-				this.dateCon.removeClass('invisible').html(dotw+', '+month+' '+this.ordinal_suffix_of(d));
-				this.timeCon.removeClass('invisible').html(h+':'+m+'<span class="ampm">'+ap+'</span>');
+				this.dateCon.removeClass('invisible')[0].innerHTML = dotw+', '+month+' '+this.ordinal_suffix_of(d);
+				this.timeCon.removeClass('invisible')[0].innerHTML = h+':'+m+'<span class="ampm">'+ap+'</span>';
 
 				this.timeUpdated = true;
 			}
@@ -648,34 +648,34 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		switch (sectionIndex) {
 			// MPH
 			case 0:
-				if (this.speedometerValue.html() != value) {
+				if (this.speedometerValue[0].innerHTML != value) {
 					/*
 					this.speedometerValue.stop(true, true).animate({'opacity':0}, 250, function() {
 						this.speedometerValue.html(value).stop(true, true).animate({'opacity':1}, 250);
 					}.bind(this));
 					*/
-					this.speedometerValue.html(value);
+					this.speedometerValue[0].innerHTML = value;
 				}
-				this.speedometerLabel.html(name);
+				this.speedometerLabel[0].innerHTML = name;
 
 				this.totalSpeed += value;
 
 				if (this.totalSpeedTicks++ % 10 === 0) {
 					// update average speed
-					this.avgSpeedConValue.html(parseInt(this.totalSpeed/this.totalSpeedTicks));
+					this.avgSpeedConValue[0].innerHTML = parseInt(this.totalSpeed/this.totalSpeedTicks);
 				}
 
 				if (value > this.topSpeed) {
 					this.topSpeed = value;
-					this.topSpeedConValue.html(value);
+					this.topSpeedConValue[0].innerHTML = value;
 				}
 
 				break;
 
 			// Heading
 			case 2:
-				this.headingValue.html(value);
-				this.headingLabel.html(name);
+				this.headingValue[0].innerHTML = value;
+				this.headingLabel[0].innerHTML = name;
 				break;
 
 			// fuel level
@@ -691,7 +691,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 					displayVal = DataTransform.scaleValue(avg, [0,255], [0,100]).toFixed(1);
 					this.fuelLevel.css('width', displayVal+'%');
-					this.fuelPercentage.html(displayVal+'%');
+					this.fuelPercentage[0].innerHTML = displayVal+'%';
 					this.fuelLevel.toggleClass('warning', displayVal <= 10);
 				}
 
@@ -701,8 +701,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			// fuel consumption average
 			case 4:
 				displayVal = (value === 0) ? '&nbsp;' : value/10;
-				this.avgFuelConsValue.html(displayVal);
-				this.avgFuelConsLabel.html(name);
+				this.avgFuelConsValue[0].innerHTML = displayVal;
+				this.avgFuelConsLabel[0].innerHTML = name;
 				break;
 
 			// Temperature
@@ -715,8 +715,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					displayVal =  value;
 				}
 
-				this.temperatureValue.html(displayVal);
-				this.temperatureLabel.html(name);
+				this.temperatureValue[0].innerHTML = displayVal;
+				this.temperatureLabel[0].innerHTML = name;
 				break;
 
 			// GPS Timezone
