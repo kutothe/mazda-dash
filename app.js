@@ -192,6 +192,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.fuelLevelQueueMax = 50; // max fuel level queue size
 		this.fuelLevelTicks = 0;
 		this.fuelLevelMod = 15; // when to recalculate the fuel level avg
+		this.fuelLevelMax = 186; // tested on 2016 Mazda3 Hatchback
 
 
 		// html elements
@@ -488,6 +489,14 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	},
 
 
+	getFuelLevel: function() {
+		var sum = this.fuelLevelQueue.reduce(function(a, b) { return a + b; }),
+			avg = sum / this.fuelLevelQueue.length;
+
+		return Math.round(DataTransform.scaleValue(avg, [0,this.fuelLevelMax], [0,100]));
+	},
+
+
 	/*
 	* http://stackoverflow.com/a/13627586/867676
 	*/
@@ -679,10 +688,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 				}
 
 				if (this.fuelLevelTicks > 10 && this.fuelLevelTicks % this.fuelLevelMod === 0) {
-					var sum = this.fuelLevelQueue.reduce(function(a, b) { return a + b; }),
-						avg = sum / this.fuelLevelQueue.length;
-
-					displayVal = DataTransform.scaleValue(avg, [0,182], [0,100]).toFixed(1);
+					displayVal = this.getFuelLevel();
 					this.fuelLevel.css('width', displayVal+'%');
 					this.fuelPercentage[0].innerHTML = displayVal+'%';
 					this.fuelLevel.toggleClass('warning', displayVal <= 10);
