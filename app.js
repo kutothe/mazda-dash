@@ -159,7 +159,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
      */
 
     config: {
-		timezoneOffset: -5
+		timezoneOffset: -5,
+		fuelLevelMaxValue: 186 // tested on 2016 Mazda3 Hatchback
 	},
 
 
@@ -209,13 +210,14 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.fuelLevelQueueMax = 60; // max fuel level queue size
 		this.fuelLevelTicks = 0;
 		this.fuelLevelMod = 10; // when to recalculate the fuel level avg
-		this.fuelLevelMax = 186; // tested on 2016 Mazda3 Hatchback
 
 		this.tripStartTime = new Date();
+		this.updateTripTimerInterval = 1000;
 
 
 		// html elements
 
+		this.mainContainer = $('<div/>').attr('id', 'main-container');
 		this.topLeftCon = $("<div/>").attr('id', 'top-left-con');
 		this.topRightCon = $("<div/>").attr('id', 'top-right-con');
 		this.bottomRightCon = $("<div/>").attr('id', 'bottom-right-con');
@@ -258,7 +260,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.altitudeLabel = $("<label/>").addClass('label').html('Altitude').appendTo(this.altitude);
 
 		this.tripTime = $("<div/>").attr('id', 'altitude').appendTo(this.additionalStats);
-		this.tripTimeValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.tripTime);
+		this.tripTimeValue = $("<div/>").addClass('value').html('0s').appendTo(this.tripTime);
 		this.tripTimeLabel = $("<label/>").addClass('label').html('Trip Time').appendTo(this.tripTime);
 
 
@@ -267,21 +269,14 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.fuelIcon = $('<div/>').addClass('fuel-icon').appendTo(this.bottomCon);
 
 
-		this.topLeftCon.appendTo(this.canvas);
-		this.topRightCon.appendTo(this.canvas);
-		this.bottomRightCon.appendTo(this.canvas);
-		this.bottomCon.appendTo(this.canvas);
+		this.topLeftCon.appendTo(this.mainContainer);
+		this.topRightCon.appendTo(this.mainContainer);
+		this.bottomRightCon.appendTo(this.mainContainer);
+		this.bottomCon.appendTo(this.mainContainer);
+		this.mainContainer.appendTo(this.canvas);
 
 
 		this.createSections();
-
-		this.updateTripTime();
-		this.updateTripTimerInterval = 1000;
-
-		// this.updateSection(0);
-		// this.updateSection(2);
-		// this.updateSection(5);
-		// this.updateSection(6);
 	},
 
 	/**
@@ -298,6 +293,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 	focused: function() {
 		this.updateTripTimer = setInterval(function() { this.updateTripTime(); }.bind(this), this.updateTripTimerInterval);
+
+		setTimeout(function() {this.mainContainer.addClass('shown');}.bind(this), 100);
 	},
 
 
@@ -315,6 +312,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 	lost: function() {
 		clearInterval(this.updateTripTimer);
+		this.mainContainer.removeClass('shown');
 	},
 
 
@@ -541,7 +539,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 				if (!this.timeUpdated) {
 					this.timeUpdated = true;
-					setTimeout(function() {this.dateCon.add(this.timeCon).addClass('shown');}.bind(this), 100);
+					this.dateCon.add(this.timeCon).addClass('shown');
 				}
 			}
 		}
@@ -553,7 +551,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		var sum = this.fuelLevelQueue.reduce(function(a, b) { return a + b; }),
 			avg = sum / this.fuelLevelQueue.length;
 
-		return Math.round(DataTransform.scaleValue(avg, [0,this.fuelLevelMax], [0,100]));
+		return Math.round(DataTransform.scaleValue(avg, [0,this.config.fuelLevelMaxValue], [0,100]));
 	},
 	*/
 
@@ -582,7 +580,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		}
 
 		if (use_mode) {
-			retval = Math.round(DataTransform.scaleValue(result, [0,this.fuelLevelMax], [0,100]));
+			retval = Math.round(DataTransform.scaleValue(result, [0,this.config.fuelLevelMaxValue], [0,100]));
 		} else {
 			// remove values that aren't within the trim_range of the result
 			i = store.length;
@@ -598,7 +596,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			retval =  sum / (store.length+(max*weight));
 		}
 
-		return Math.min(100, Math.round(DataTransform.scaleValue(retval, [0,this.fuelLevelMax], [0,100])));
+		return Math.min(100, Math.round(DataTransform.scaleValue(retval, [0,this.config.fuelLevelMaxValue], [0,100])));
 	},
 
 
@@ -808,7 +806,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					this.fuelLevelQueue.shift();
 				}
 
-				// this.fuelLevelTicks = this.fuelLevelMod;
+				this.fuelLevelTicks = this.fuelLevelMod;
 				if (this.fuelLevelTicks >= this.fuelLevelMod && this.fuelLevelTicks % this.fuelLevelMod === 0) {
 					displayVal = this.getFuelLevel();
 					this.fuelLevel.css('width', displayVal+'%');
