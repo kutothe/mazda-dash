@@ -8,10 +8,10 @@
  * [license]
  */
 
- @font-face {
-     font-family: myriadPro;
-     src: url(fonts/Myriad-Pro_31655.ttf);
- }
+@font-face {
+    font-family: myriadPro;
+    src: url(fonts/Myriad-Pro_31655.ttf);
+}
 
 [app="app.balzdash"] .invisible {
 	visibility: hidden;
