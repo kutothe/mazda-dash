@@ -143,7 +143,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			fuelConsUnit: 'Avg L/100km',
 			fuelConsTransform: false,
         	temperatureUnit: 'c',
-			temperatureTransform: false,
+			temperatureTransform: DataTransform.toCelsius
         },
     },
 
@@ -167,6 +167,12 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 	created: function() {
 		var self = this;
+
+		// add helper function to DataTransform
+
+		DataTransform.toCelsius = function(value) {
+			return Math.round((value - 32) * 5 / 9);
+		};
 
 		// helper data
 
