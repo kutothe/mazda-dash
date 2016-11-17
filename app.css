@@ -147,14 +147,15 @@
 
 [app="app.balzdash"] #heading .label,
 [app="app.balzdash"] #avg-fuel-cons .label {
-	display: inline-block;
+	float: right;
 	margin-right: 8px;
 	opacity: .7;
 }
 [app="app.balzdash"] #heading .value,
 [app="app.balzdash"] #avg-fuel-cons .value {
-	display: inline-block;
+	float: right;
 	width: 40px;
+	clear: right;
 }
 
 

@@ -226,12 +226,12 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.additionalStats = $('<div/>').attr('id', 'additional-stats').appendTo(this.topRightCon);
 
 		this.heading = $('<div/>').attr('id', 'heading').appendTo(this.additionalStats);
-		this.headingLabel = $("<label/>").addClass('label').html('Heading').appendTo(this.heading);
 		this.headingValue = $("<div/>").addClass('value').html('N').appendTo(this.heading);
+		this.headingLabel = $("<label/>").addClass('label').html('Heading').appendTo(this.heading);
 
 		this.avgFuelCons = $('<div/>').attr('id', 'avg-fuel-cons').appendTo(this.additionalStats);
-		this.avgFuelConsLabel = $("<label/>").addClass('label').appendTo(this.avgFuelCons);
 		this.avgFuelConsValue = $("<div/>").addClass('value').html('&nbsp;').appendTo(this.avgFuelCons);
+		this.avgFuelConsLabel = $("<label/>").addClass('label').appendTo(this.avgFuelCons);
 
 		this.fuelLevel = $('<div/>').addClass('fuel-level').appendTo(this.bottomCon);
 		this.fuelPercentage = $('<div/>').addClass('fuel-percentage').appendTo(this.bottomCon);
