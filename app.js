@@ -159,8 +159,9 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
      */
 
     config: {
+		defaultTheme: 0, // white
+		fuelLevelMaxValue: 186, // tested on 2016 Mazda3 Hatchback
 		timezoneOffset: -5,
-		fuelLevelMaxValue: 186 // tested on 2016 Mazda3 Hatchback
 	},
 
 
@@ -197,6 +198,9 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.daysArray = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
 		this.monthsArray = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+		this.themes = ['white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black'];
+		this.currentTheme = this.config.defaultTheme;
+
 
 		this.totalSpeed = 0;
 		this.totalSpeedTicks = 0;
@@ -220,7 +224,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.mainContainer = $('<div/>').attr('id', 'main-container');
 		this.topLeftCon = $("<div/>").attr('id', 'top-left-con');
 		this.topRightCon = $("<div/>").attr('id', 'top-right-con');
-		this.bottomRightCon = $("<div/>").attr('id', 'bottom-right-con');
 		this.bottomCon = $("<div/>").attr('id', 'bottom-con');
 
 		this.speedometer = $("<div/>").attr('id', 'speedometer').appendTo(this.topLeftCon);
@@ -271,10 +274,10 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.topLeftCon.appendTo(this.mainContainer);
 		this.topRightCon.appendTo(this.mainContainer);
-		this.bottomRightCon.appendTo(this.mainContainer);
 		this.bottomCon.appendTo(this.mainContainer);
 		this.mainContainer.appendTo(this.canvas);
 
+		this.canvas.addClass('theme-'+this.themes[this.currentTheme]);
 
 		this.createSections();
 	},
@@ -411,6 +414,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	onControllerEvent: function(eventId) {
+		var oldTheme;
 
 		switch(eventId) {
 
@@ -418,42 +422,50 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			 * MultiController was moved to the left
 			 */
 			case this.LEFT:
-
 				break;
 
 			/*
 			 * MultiController was moved to the right
 			 */
 			case this.RIGHT:
-
 				break;
 
 			/*
 			 * MultiController was moved up
 			 */
 			case this.UP:
-
 				break;
 
 			/*
 			 * MultiController was moved down
 			 */
 			case this.DOWN:
-
 				break;
 
 			/*
 			 * MultiController Wheel was turned clockwise
 			 */
 			case this.CW:
+				oldTheme = this.themes[this.currentTheme];
+				this.currentTheme++;
+				if (this.currentTheme >= this.themes.length) {
+					this.currentTheme = 0;
+				}
 
+				this.canvas.removeClass('theme-'+oldTheme).addClass('theme-'+this.themes[this.currentTheme]);
 				break;
 
 			/*
 			 * MultiController Wheel was turned counter-clockwise
 			 */
 			case this.CCW:
+				oldTheme = this.themes[this.currentTheme];
+				this.currentTheme--;
+				if (this.currentTheme < 0) {
+					this.currentTheme = this.themes.length - 1;
+				}
 
+				this.canvas.removeClass('theme-'+oldTheme).addClass('theme-'+this.themes[this.currentTheme]);
 				break;
 
 			/*
@@ -467,7 +479,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			 * MultiController hot key "back" was pushed
 			 */
 			case this.BACK:
-
 				break;
 		}
 
@@ -806,7 +817,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 					this.fuelLevelQueue.shift();
 				}
 
-				this.fuelLevelTicks = this.fuelLevelMod;
+				// this.fuelLevelTicks = this.fuelLevelMod;
 				if (this.fuelLevelTicks >= this.fuelLevelMod && this.fuelLevelTicks % this.fuelLevelMod === 0) {
 					displayVal = this.getFuelLevel();
 					this.fuelLevel.css('width', displayVal+'%');
