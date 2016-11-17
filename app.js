@@ -268,6 +268,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.createSections();
 
 		this.updateTripTime();
+		this.updateTripTimerInterval = 1000;
 
 		// this.updateSection(0);
 		// this.updateSection(2);
@@ -288,9 +289,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	focused: function() {
-		var self = this;
-
-		this.updateTripTimer = setInterval(function() { self.updateTripTime(); }, 1000);
+		this.updateTripTimer = setInterval(function() { this.updateTripTime(); }.bind(this), this.updateTripTimerInterval);
 	},
 
 
@@ -477,20 +476,30 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 	updateTripTime: function() {
 		var now = new Date(),
-			diff = this.tripStartTime - now,
-			diffH = Math.round((diff % 86400000) / 3600000),
-			diffM = Math.round(((diff % 86400000) % 3600000) / 60000),
-			diffS = Math.round(((diff % 86400000) % 216000000) / 60000),
-			text = diffM+'m';
+			diff = now - this.tripStartTime,
+			diffH = Math.floor((diff % 86400000) / 3600000),
+			diffM = Math.floor(((diff % 86400000) % 3600000) / 60000),
+			diffS = Math.floor((((diff % 86400000) % 3600000) % 60000) / 1000),
+			text;
 
 		if (diffM === 0 && diffH === 0) {
 			text = diffS+'s';
-		} else if (diffH > 0) {
-			text = diffH+'h '+text;
+		} else {
+			text = diffM+'m';
+
+			if (this.updateTripTimerInterval === 1000) {
+				// after done displaying seconds, set the trip timer to only run every minute
+				clearInterval(this.updateTripTimer);
+				this.updateTripTimerInterval = 60000;
+				this.updateTripTimer = setInterval(function() { this.updateTripTime(); }.bind(this), this.updateTripTimerInterval);
+			}
+
+			if (diffH > 0) {
+				text = diffH+'h '+text;
+			}
 		}
 
 		this.tripTimeValue[0].innerHTML = text;
-
 	},
 
 	updateDateTime: function(timestamp) {
