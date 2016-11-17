@@ -188,9 +188,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		DataTransform.toCelsius = function(value) {
 			return Math.round((value - 32) * 5 / 9);
 		};
-		DataTransform.toFeet = function(value) {
-			return Math.round(value * 3.28084);
-		};
 
 
 		// helper data
