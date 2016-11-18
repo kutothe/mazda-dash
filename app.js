@@ -287,8 +287,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.canvas.addClass('theme-'+this.themes[this.currentTheme]);
 
 		this.createSections();
-
-		this.updateFuelLevel(50);
 	},
 
 	/**
