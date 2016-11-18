@@ -305,6 +305,10 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 
 
 		this.createSections();
+
+
+		this.updateTripTime();
+		this.updateTripTimer = setInterval(function() { this.updateTripTime(); }.bind(this), this.updateTripTimerInterval);
 	},
 
 	/**
@@ -321,6 +325,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 
 	focused: function() {
 		this.updateTripTime();
+		clearInterval(this.updateTripTimer);
 		this.updateTripTimer = setInterval(function() { this.updateTripTime(); }.bind(this), this.updateTripTimerInterval);
 
 		// this.mainContainer.addClass('shown');
