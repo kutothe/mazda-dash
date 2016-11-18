@@ -895,13 +895,15 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 				this.updateDateTime(value);
 				break;
 
-			// GPS Timezone
+			// GPS Altitude
 			case 7:
-				displayVal = value;
-				if (curRegion.altitudeTransform) {
-					displayVal = curRegion.altitudeTransform(displayVal);
+				if (!isNaN(value)) {
+					displayVal = value;
+					if (curRegion.altitudeTransform) {
+						displayVal = curRegion.altitudeTransform(displayVal);
+					}
+					this.altitudeValue[0].innerHTML = displayVal+'<span class="unit">'+curRegion.altitudeUnit+'</span>';
 				}
-				this.altitudeValue[0].innerHTML = displayVal+'<span class="unit">'+curRegion.altitudeUnit+'</span>';
 				break;
 
 			default:
