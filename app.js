@@ -170,18 +170,16 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         },
     },
 
-
 	/**
-     * (config)
-     *
-     * An object that holds tweakable config values
-     */
+	 * (config)
+	 *
+	 */
+	config: {
+ 		"theme": 0,
+ 		"fuelLevelMaxValue": 186,
+ 		"timezoneOffset": -5,
+ 	},
 
-    config: {
-		defaultTheme: 0, // white
-		fuelLevelMaxValue: 186, // tested on 2016 Mazda3 Hatchback
-		timezoneOffset: -5,
-	},
 
 
 	/***
@@ -205,6 +203,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		// load config and update where necessary
 
+		// this.getDefaultConfig();
 		this.getConfig();
 
 
@@ -300,7 +299,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.mainContainer.appendTo(this.canvas);
 
 
-		this.canvas.addClass('theme-'+this.themes[this.config.defaultTheme]);
+		this.canvas.addClass('theme-'+this.themes[this.config.theme]);
 
 
 		this.createSections();
@@ -474,13 +473,13 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			 * MultiController Wheel was turned clockwise
 			 */
 			case this.CW:
-				tempVar = this.themes[this.config.defaultTheme];
-				this.config.defaultTheme++;
-				if (this.config.defaultTheme >= this.themes.length) {
-					this.config.defaultTheme = 0;
+				tempVar = this.themes[this.config.theme];
+				this.config.theme++;
+				if (this.config.theme >= this.themes.length) {
+					this.config.theme = 0;
 				}
 
-				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.defaultTheme]);
+				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.theme]);
 				this.saveConfig();
 				break;
 
@@ -488,13 +487,13 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			 * MultiController Wheel was turned counter-clockwise
 			 */
 			case this.CCW:
-				tempVar = this.themes[this.config.defaultTheme];
-				this.config.defaultTheme--;
-				if (this.config.defaultTheme < 0) {
-					this.config.defaultTheme = this.themes.length - 1;
+				tempVar = this.themes[this.config.theme];
+				this.config.theme--;
+				if (this.config.theme < 0) {
+					this.config.theme = this.themes.length - 1;
 				}
 
-				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.defaultTheme]);
+				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.theme]);
 				this.saveConfig();
 				break;
 
@@ -523,9 +522,28 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	},
 
 
+	getDefaultConfig: function() {
+		var fs = require('fs'),
+			string;
+
+		try {
+			string = fs.readFileSync(this.location+'config.json', 'utf8');
+		} catch (err) {
+			if (err.code === 'ENOENT') {
+				this.log.error('config file not found');
+			} else {
+				this.log.error('config file load error');
+			}
+		}
+
+		if (string !== undefined) {
+			$.extend(this.config, JSON.parse);
+		}
+	},
+
+
 	getConfig: function() {
-		var string = this.get('AppMultiDashConfig'),
-			obj;
+		var string = this.get('AppMultiDashConfig');
 
 		if (string !== undefined) {
 			$.extend(this.config, string);
