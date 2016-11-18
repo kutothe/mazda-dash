@@ -162,7 +162,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		defaultTheme: 0, // white
 		fuelLevelMaxValue: 186, // tested on 2016 Mazda3 Hatchback
 		timezoneOffset: -5,
-		localStoragePrefix: 'app.balzdash.'
+		// localStoragePrefix: 'app.balzdash.'
 	},
 
 
@@ -198,12 +198,14 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
 		this.themes = ['white', 'night-white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black'];
 
+		/*
 		if (localStorage.getItem(this.config.localStoragePrefix+'currentTheme') === null) {
 			this.currentTheme = this.config.defaultTheme;
 		} else {
 			this.currentTheme = parseInt(localStorage.getItem(this.config.localStoragePrefix+'currentTheme'));
 		}
-
+		*/
+		this.currentTheme = this.config.defaultTheme;
 
 
 		this.totalSpeed = 0;
@@ -463,7 +465,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 				}
 
 				this.canvas.removeClass('theme-'+oldTheme).addClass('theme-'+this.themes[this.currentTheme]);
-				localStorage.setItem(this.config.localStoragePrefix+'currentTheme', this.currentTheme);
+				// localStorage.setItem(this.config.localStoragePrefix+'currentTheme', this.currentTheme);
 				break;
 
 			/*
@@ -477,7 +479,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 				}
 
 				this.canvas.removeClass('theme-'+oldTheme).addClass('theme-'+this.themes[this.currentTheme]);
-				localStorage.setItem(this.config.localStoragePrefix+'currentTheme', this.currentTheme);
+				// localStorage.setItem(this.config.localStoragePrefix+'currentTheme', this.currentTheme);
 				break;
 
 			/*
