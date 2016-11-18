@@ -195,7 +195,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.daysArray = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
 		this.monthsArray = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
-		this.themes = ['white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black'];
+		this.themes = ['white', 'night-white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black'];
 		this.currentTheme = this.config.defaultTheme;
 
 
@@ -280,6 +280,8 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.canvas.addClass('theme-'+this.themes[this.currentTheme]);
 
 		this.createSections();
+
+		this.updateFuelLevel(50);
 	},
 
 	/**
@@ -394,17 +396,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
     onRegionChange: function(region) {
 		var curRegion = this.regions[this.getRegion()];
-
-		/*
-		speedUnit: 'MPH',
-		speedTransform: DataTransform.toMPH,
-		fuelConsUnit: 'Avg MPG',
-		fuelConsTransform: DataTransform.toMPG,
-		temperatureUnit: 'f',
-		temperatureTransform: false, // DataTransform.toFahrenheit,
-		altitudeUnit: 'ft',
-		altitudeTransform: DataTransform.toFeet
-		*/
 
 		this.speedometerLabel[0].innerHTML = curRegion.speedUnit;
 		this.avgFuelConsLabel[0].innerHTML = curRegion.fuelConsUnit;
@@ -625,6 +616,13 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	},
 
 
+	updateFuelLevel: function(value) {
+		this.fuelLevel.css('width', value+'%');
+		this.fuelPercentage[0].innerHTML = value+'%';
+		this.fuelLevel.toggleClass('warning', value <= 10);
+	},
+
+
 	/*
 	* http://stackoverflow.com/a/13627586/867676
 	*/
@@ -788,9 +786,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 				// this.fuelLevelTicks = this.fuelLevelMod;
 				if (this.fuelLevelTicks >= this.fuelLevelMod && this.fuelLevelTicks % this.fuelLevelMod === 0) {
 					displayVal = this.getFuelLevel();
-					this.fuelLevel.css('width', displayVal+'%');
-					this.fuelPercentage[0].innerHTML = displayVal+'%';
-					this.fuelLevel.toggleClass('warning', displayVal <= 10);
+					this.updateFuelLevel(displayVal);
 				}
 
 				this.fuelLevelTicks++;
