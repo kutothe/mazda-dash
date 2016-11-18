@@ -32,7 +32,7 @@ var MyDataTransform = {
  * Custom Application
  */
 
-CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
+CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 
 	/**
 	 * (require)
