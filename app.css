@@ -269,7 +269,7 @@
 	background-color: rgba(0, 117, 255, .2);
 	height: 100%;
 	width: 0;
-	transition: width .8s linear;
+	transition: width 1.5s linear;
 }
 [app="app.multidash"].theme-blue #bottom-con .fuel-level {
 	background-color: rgba(79, 166, 246, .7);
