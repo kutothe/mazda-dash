@@ -225,7 +225,6 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 
 		this.timeTicks = 0;
 		this.timeUpdated = false;
-		this.temperatureUpdated = false;
 
 		this.fuelLevelQueue = [];
 		this.fuelLevelQueueMax = 60; // max fuel level queue size
@@ -342,7 +341,6 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 
 	lost: function() {
 		clearInterval(this.updateTripTimer);
-
 		// this.mainContainer.removeClass('shown');
 	},
 
@@ -875,16 +873,13 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 			case 5:
 				if (value === 255) {
 					displayVal =  '&nbsp;';
+					this.temperature.removeClass('shown');
 				} else {
 					displayVal =  value;
 					if (curRegion.temperatureTransform) {
 						displayVal = curRegion.temperatureTransform(displayVal);
 					}
-
-					if (!this.temperatureUpdated) {
-						this.temperatureUpdated = true;
-						this.temperature.addClass('shown');
-					}
+					this.temperature.addClass('shown');
 				}
 
 				this.temperatureValue[0].innerHTML = displayVal;
