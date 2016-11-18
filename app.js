@@ -8,6 +8,25 @@
  * [license]
  */
 
+/**
+ * DataTransformation
+ */
+
+var MyDataTransform = {
+
+	/**
+	 * (toFeet) returns the Meters coverted to Feet
+	 */
+
+	toFeet: function(value) {
+		return Math.round(value * 3.28084);
+	},
+
+	toCelsius: function(value) {
+		return Math.round((value - 32) * 5 / 9);
+	},
+
+};
 
 /**
  * Custom Application
@@ -132,7 +151,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         	temperatureUnit: 'f',
 			temperatureTransform: false, // DataTransform.toFahrenheit,
 			altitudeUnit: 'ft',
-			altitudeTransform: DataTransform.toFeet
+			altitudeTransform: MyDataTransform.toFeet
         },
 
         /**
@@ -145,7 +164,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			fuelConsUnit: 'Avg L/100km',
 			fuelConsTransform: false,
         	temperatureUnit: 'c',
-			temperatureTransform: DataTransform.toCelsius,
+			temperatureTransform: MyDataTransform.toCelsius,
 			altitudeUnit: 'm',
 			altitudeTransform: false
         },
