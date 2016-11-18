@@ -304,6 +304,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	focused: function() {
+		this.updateTripTime();
 		this.updateTripTimer = setInterval(function() { this.updateTripTime(); }.bind(this), this.updateTripTimerInterval);
 
 		setTimeout(function() {this.mainContainer.addClass('shown');}.bind(this), 500);
