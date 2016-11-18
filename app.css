@@ -189,6 +189,13 @@
 
 [app="app.balzdash"] #temperature {
 	position: relative;
+	opacity: 0;
+	transform: scale(.9);
+	transition: opacity .6s linear, transform .4s linear;
+}
+[app="app.balzdash"] #temperature.shown {
+	opacity: 1;
+	transform: scale(1);
 }
 [app="app.balzdash"] #temperature .value {
 	display: inline-block;

@@ -170,9 +170,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         },
     },
 
+
 	/**
 	 * (config)
 	 *
+	 * An object that holds tweakable config values
 	 */
 	config: {
  		"theme": 0,
@@ -223,6 +225,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.timeTicks = 0;
 		this.timeUpdated = false;
+		this.temperatureUpdated = false;
 
 		this.fuelLevelQueue = [];
 		this.fuelLevelQueueMax = 60; // max fuel level queue size
@@ -870,13 +873,16 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			// Temperature
 			case 5:
 				if (value === 255) {
-					this.temperature.addClass('invisible');
 					displayVal =  '&nbsp;';
 				} else {
-					this.temperature.removeClass('invisible');
 					displayVal =  value;
 					if (curRegion.temperatureTransform) {
 						displayVal = curRegion.temperatureTransform(displayVal);
+					}
+
+					if (!this.temperatureUpdated) {
+						this.temperatureUpdated = true;
+						this.temperature.addClass('shown');
 					}
 				}
 
