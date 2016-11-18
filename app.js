@@ -1,5 +1,5 @@
 /**
- * [balzdash]
+ * [multidash]
  *
  * @version: 0.0.1
  * @author: [author]
