@@ -205,7 +205,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		// load config and update where necessary
 
-		this.localStoragePrefix = 'app.balzdash.';
 		this.getConfig();
 
 
@@ -244,6 +243,9 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.topLeftCon = $("<div/>").attr('id', 'top-left-con');
 		this.topRightCon = $("<div/>").attr('id', 'top-right-con');
 		this.bottomCon = $("<div/>").attr('id', 'bottom-con');
+
+
+		this.statusMessage = $("<div/>").attr('id', 'status-message');
 
 		this.speedometer = $("<div/>").attr('id', 'speedometer').appendTo(this.topLeftCon);
 		this.speedometerValue = $("<div/>").addClass('value').html('0').appendTo(this.speedometer);
@@ -291,10 +293,15 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.fuelIcon = $('<div/>').addClass('fuel-icon').appendTo(this.bottomCon);
 
 
+		this.statusMessage.appendTo(this.mainContainer);
 		this.topLeftCon.appendTo(this.mainContainer);
 		this.topRightCon.appendTo(this.mainContainer);
 		this.bottomCon.appendTo(this.mainContainer);
 		this.mainContainer.appendTo(this.canvas);
+
+
+		this.canvas.addClass('theme-'+this.themes[this.config.defaultTheme]);
+
 
 		this.createSections();
 	},
@@ -315,7 +322,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.updateTripTime();
 		this.updateTripTimer = setInterval(function() { this.updateTripTime(); }.bind(this), this.updateTripTimerInterval);
 
-		setTimeout(function() {this.mainContainer.addClass('shown');}.bind(this), 1000);
+		this.mainContainer.addClass('shown');
 	},
 
 
@@ -517,21 +524,17 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 
 	getConfig: function() {
-		/*
-		var fs = require('fs'),
-			string = fs.readFileSync('/tmp/'+this.localStoragePrefix+'config.json', 'utf8'),
-			obj = JSON.parse(string);
+		var string = this.get('AppMultiDashConfig'),
+			obj;
 
-		$.extend(this.config, obj);
-		*/
+		if (string !== undefined) {
+			$.extend(this.config, string);
+		}
 	},
 
 
 	saveConfig: function() {
-		/*
-		var fs = require('fs');
-		fs.writeFileSync('/tmp/'+this.localStoragePrefix+'config.json', JSON.stringify(this.config));
-		*/
+		this.set('AppMultiDashConfig', this.config);
 	},
 
 
@@ -737,7 +740,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
         }.bind(this));
 
 		// update speedometer label for region
-		// window.Logger.debug('region '+this.regions[this.getRegion()].unit);
+		// this.log.debug('region '+this.regions[this.getRegion()].unit);
 		// this.speedometerLabel.html(this.regions[this.getRegion()].unit);
 
     },
