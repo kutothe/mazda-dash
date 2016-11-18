@@ -181,7 +181,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		defaultTheme: 0, // white
 		fuelLevelMaxValue: 186, // tested on 2016 Mazda3 Hatchback
 		timezoneOffset: -5,
-		// localStoragePrefix: 'app.balzdash.'
 	},
 
 
@@ -203,11 +202,11 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	created: function() {
-		// add helper function to DataTransform
 
-		DataTransform.toCelsius = function(value) {
-			return Math.round((value - 32) * 5 / 9);
-		};
+		// load config and update where necessary
+
+		this.localStoragePrefix = 'app.balzdash.';
+		this.getConfig();
 
 
 		// helper data
@@ -216,15 +215,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.monthsArray = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
 		this.themes = ['white', 'night-white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black'];
-
-		/*
-		if (localStorage.getItem(this.config.localStoragePrefix+'currentTheme') === null) {
-			this.currentTheme = this.config.defaultTheme;
-		} else {
-			this.currentTheme = parseInt(localStorage.getItem(this.config.localStoragePrefix+'currentTheme'));
-		}
-		*/
-		this.currentTheme = this.config.defaultTheme;
 
 
 		this.totalSpeed = 0;
@@ -246,6 +236,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 
 		region = this.regions[this.getRegion()];
+
 
 		// html elements
 
@@ -304,8 +295,6 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 		this.topRightCon.appendTo(this.mainContainer);
 		this.bottomCon.appendTo(this.mainContainer);
 		this.mainContainer.appendTo(this.canvas);
-
-		this.canvas.addClass('theme-'+this.themes[this.currentTheme]);
 
 		this.createSections();
 	},
@@ -422,7 +411,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
      */
 
     onRegionChange: function(region) {
-		var curRegion = this.regions[this.getRegion()];
+		var curRegion = this.regions[region];
 
 		this.speedometerLabel[0].innerHTML = curRegion.speedUnit;
 		this.avgFuelConsLabel[0].innerHTML = curRegion.fuelConsUnit;
@@ -446,7 +435,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 	 */
 
 	onControllerEvent: function(eventId) {
-		var oldTheme;
+		var tempVar;
 
 		switch(eventId) {
 
@@ -478,35 +467,36 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 			 * MultiController Wheel was turned clockwise
 			 */
 			case this.CW:
-				oldTheme = this.themes[this.currentTheme];
-				this.currentTheme++;
-				if (this.currentTheme >= this.themes.length) {
-					this.currentTheme = 0;
+				tempVar = this.themes[this.config.defaultTheme];
+				this.config.defaultTheme++;
+				if (this.config.defaultTheme >= this.themes.length) {
+					this.config.defaultTheme = 0;
 				}
 
-				this.canvas.removeClass('theme-'+oldTheme).addClass('theme-'+this.themes[this.currentTheme]);
-				// localStorage.setItem(this.config.localStoragePrefix+'currentTheme', this.currentTheme);
+				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.defaultTheme]);
+				this.saveConfig();
 				break;
 
 			/*
 			 * MultiController Wheel was turned counter-clockwise
 			 */
 			case this.CCW:
-				oldTheme = this.themes[this.currentTheme];
-				this.currentTheme--;
-				if (this.currentTheme < 0) {
-					this.currentTheme = this.themes.length - 1;
+				tempVar = this.themes[this.config.defaultTheme];
+				this.config.defaultTheme--;
+				if (this.config.defaultTheme < 0) {
+					this.config.defaultTheme = this.themes.length - 1;
 				}
 
-				this.canvas.removeClass('theme-'+oldTheme).addClass('theme-'+this.themes[this.currentTheme]);
-				// localStorage.setItem(this.config.localStoragePrefix+'currentTheme', this.currentTheme);
+				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.defaultTheme]);
+				this.saveConfig();
 				break;
 
 			/*
 			 * MultiController's center was pushed down
 			 */
 			case this.SELECT:
-				this.setRegion(this.getRegion() == "na" ? "eu" : "na");
+				tempVar	= (this.getRegion() == 'na') ? 'eu' : 'na';
+				this.setRegion(tempVar);
 				break;
 
 			/*
@@ -524,6 +514,22 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		return this.headingsArray[(val % 16)];
 	},
+
+
+	getConfig: function() {
+		var fs = require('fs'),
+			string = fs.readFileSync('/tmp/'+this.localStoragePrefix+'config.json', 'utf8'),
+			obj = JSON.parse(string);
+
+		$.extend(this.config, obj);
+	},
+
+
+	saveConfig: function() {
+		var fs = require('fs');
+		fs.writeFileSync('/tmp/'+this.localStoragePrefix+'config.json', JSON.stringify(this.config));
+	},
+
 
 	updateTripTime: function() {
 		var now = new Date(),
@@ -552,6 +558,7 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 		this.tripTimeValue[0].innerHTML = text;
 	},
+
 
 	updateDateTime: function(timestamp) {
 		var objDate = new Date(timestamp*1000),
