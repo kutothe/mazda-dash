@@ -517,17 +517,21 @@ CustomApplicationsHandler.register("app.balzdash", new CustomApplication({
 
 
 	getConfig: function() {
+		/*
 		var fs = require('fs'),
 			string = fs.readFileSync('/tmp/'+this.localStoragePrefix+'config.json', 'utf8'),
 			obj = JSON.parse(string);
 
 		$.extend(this.config, obj);
+		*/
 	},
 
 
 	saveConfig: function() {
+		/*
 		var fs = require('fs');
 		fs.writeFileSync('/tmp/'+this.localStoragePrefix+'config.json', JSON.stringify(this.config));
+		*/
 	},
 
 
