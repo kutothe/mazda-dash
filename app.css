@@ -62,7 +62,11 @@
 }
 [app="app.multidash"].theme-black {
 	color: rgba(0, 0, 0, 1);
-	background-color: #dddddd;
+	background-color: #bbbbbb;
+}
+[app="app.multidash"].theme-night-black {
+	color: rgba(0, 0, 0, 1);
+	background-color: #777777;
 }
 
 [app="app.multidash"] #main-container {

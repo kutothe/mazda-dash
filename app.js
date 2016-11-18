@@ -214,7 +214,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 		this.daysArray = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
 		this.monthsArray = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
-		this.themes = ['white', 'night-white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black'];
+		this.themes = ['white', 'night-white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black', 'night-black'];
 
 
 		this.totalSpeed = 0;
