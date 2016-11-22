@@ -34,45 +34,14 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	font-family: robotoLight,"Helvetica","Roboto","Arial",sans-serif;
-	color: rgba(255, 255, 255, 0.9);
 }
-[app="app.multidash"].theme-night-white {
-	color: rgba(255, 255, 255, 0.4);
-}
-[app="app.multidash"].theme-blue {
-	color: rgb(79, 166, 246);
-}
-[app="app.multidash"].theme-green {
-	color: rgb(0, 227, 36);
-}
-[app="app.multidash"].theme-red {
-	color: rgb(255, 0, 0);
-}
-[app="app.multidash"].theme-purple {
-	color: rgb(151, 64, 250);
-}
-[app="app.multidash"].theme-orange {
-	color: orange;
-}
-[app="app.multidash"].theme-yellow {
-	color: yellow;
-}
-[app="app.multidash"].theme-pink {
-	color: rgb(232, 92, 255);
-}
-[app="app.multidash"].theme-black {
-	color: rgba(0, 0, 0, 1);
-	background-color: #bbbbbb;
-}
-[app="app.multidash"].theme-night-black {
-	color: rgba(0, 0, 0, 1);
-	background-color: #777777;
-}
+
 
 [app="app.multidash"] #main-container {
 	position: relative;
 	width: 100%;
 	height: 100%;
+	color: rgba(255, 255, 255, 0.9);
 	/*
 	opacity: 0;
 	transform: scale(.95);
@@ -85,6 +54,39 @@
 	transform: scale(1);
 }
 */
+[app="app.multidash"] #main-container.theme-night-white {
+	color: rgba(255, 255, 255, 0.4);
+}
+[app="app.multidash"] #main-container.theme-blue {
+	color: rgb(79, 166, 246);
+}
+[app="app.multidash"] #main-container.theme-green {
+	color: rgb(0, 227, 36);
+}
+[app="app.multidash"] #main-container.theme-red {
+	color: rgb(255, 0, 0);
+}
+[app="app.multidash"] #main-container.theme-purple {
+	color: rgb(151, 64, 250);
+}
+[app="app.multidash"] #main-container.theme-orange {
+	color: orange;
+}
+[app="app.multidash"] #main-container.theme-yellow {
+	color: yellow;
+}
+[app="app.multidash"] #main-container.theme-pink {
+	color: rgb(232, 92, 255);
+}
+[app="app.multidash"] #main-container.theme-black {
+	color: rgba(0, 0, 0, 1);
+	background-color: #bbbbbb;
+}
+[app="app.multidash"] #main-container.theme-night-black {
+	color: rgba(0, 0, 0, 1);
+	background-color: #777777;
+}
+
 
 [app="app.multidash"] #status-message {
 	position: absolute;
@@ -275,25 +277,25 @@
 	width: 0;
 	transition: width 1.5s linear;
 }
-[app="app.multidash"].theme-blue #bottom-con .fuel-level {
+[app="app.multidash"] #main-container.theme-blue #bottom-con .fuel-level {
 	background-color: rgba(79, 166, 246, .7);
 }
-[app="app.multidash"].theme-green #bottom-con .fuel-level {
+[app="app.multidash"] #main-container.theme-green #bottom-con .fuel-level {
 	background-color: rgba(0, 227, 36, .5);
 }
-[app="app.multidash"].theme-red #bottom-con .fuel-level {
+[app="app.multidash"] #main-container.theme-red #bottom-con .fuel-level {
 	background-color: rgba(255, 0, 0, .5);
 }
-[app="app.multidash"].theme-purple #bottom-con .fuel-level {
+[app="app.multidash"] #main-container.theme-purple #bottom-con .fuel-level {
 	background-color: rgba(151, 64, 250, .7);
 }
-[app="app.multidash"].theme-orange #bottom-con .fuel-level {
+[app="app.multidash"] #main-container.theme-orange #bottom-con .fuel-level {
 	background-color: rgba(255, 165, 0, .6);
 }
-[app="app.multidash"].theme-yellow #bottom-con .fuel-level {
+[app="app.multidash"] #main-container.theme-yellow #bottom-con .fuel-level {
 	background-color: rgba(255, 255, 0, .5);
 }
-[app="app.multidash"].theme-pink #bottom-con .fuel-level {
+[app="app.multidash"] #main-container.theme-pink #bottom-con .fuel-level {
 	background-color: rgba(232, 92, 255, .6);
 }
 [app="app.multidash"] #bottom-con .fuel-percentage {
@@ -305,7 +307,7 @@
 	opacity: .8;
 	z-index: 1;
 }
-[app="app.multidash"].theme-yellow #bottom-con .fuel-percentage {
+[app="app.multidash"] #main-container.theme-yellow #bottom-con .fuel-percentage {
 	opacity: 1;
 }
 [app="app.multidash"] #bottom-con .fuel-icon {
@@ -319,10 +321,11 @@
 	z-index: 2;
 	opacity: .4;
 }
-[app="app.multidash"].theme-black #bottom-con .fuel-icon {
-	opacity: .8;
+[app="app.multidash"] #main-container.theme-black #bottom-con .fuel-icon {
+	opacity: .6;
+	-webkit-filter: invert(100%);
 }
-[app="app.multidash"].theme-yellow #bottom-con .fuel-icon {
+[app="app.multidash"] #main-container.theme-yellow #bottom-con .fuel-icon {
 	opacity: 1;
 }
 

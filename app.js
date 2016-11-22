@@ -180,6 +180,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
  		"theme": 0,
  		"fuelLevelMaxValue": 186,
  		"timezoneOffset": -5,
+		"brightness": 100
  	},
 
 
@@ -206,7 +207,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 		// load config and update where necessary
 
 		// this.getDefaultConfig();
-		this.getConfig();
+		// this.getConfig();
 
 
 		// helper data
@@ -214,7 +215,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 		this.daysArray = ['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
 		this.monthsArray = ['Jan','Feb','March','Apr','May','Jun','Jul','Aug','Sept','Oct','Nov','Dec'];
 		this.headingsArray = ['N','NNE','NE','ENE','E','ESE', 'SE', 'SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
-		this.themes = ['white', 'night-white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black', 'night-black'];
+		this.themes = ['white', 'blue', 'green', 'red', 'purple', 'orange', 'yellow', 'pink', 'black'];
 
 
 		this.totalSpeed = 0;
@@ -300,8 +301,8 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 		this.bottomCon.appendTo(this.mainContainer);
 		this.mainContainer.appendTo(this.canvas);
 
-
-		this.canvas.addClass('theme-'+this.themes[this.config.theme]);
+		this.adjustBrightness(0);
+		this.mainContainer.addClass('theme-'+this.themes[this.config.theme]);
 
 
 		this.createSections();
@@ -437,6 +438,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 	},
 
 
+
 	/**
 	 * (event) onControllerEvent
 	 *
@@ -456,12 +458,14 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 			 * MultiController was moved to the left
 			 */
 			case this.LEFT:
+				this.adjustBrightness(-10);
 				break;
 
 			/*
 			 * MultiController was moved to the right
 			 */
 			case this.RIGHT:
+				this.adjustBrightness(10);
 				break;
 
 			/*
@@ -486,7 +490,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 					this.config.theme = 0;
 				}
 
-				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.theme]);
+				this.mainContainer.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.theme]);
 				this.saveConfig();
 				break;
 
@@ -500,7 +504,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 					this.config.theme = this.themes.length - 1;
 				}
 
-				this.canvas.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.theme]);
+				this.mainContainer.removeClass('theme-'+tempVar).addClass('theme-'+this.themes[this.config.theme]);
 				this.saveConfig();
 				break;
 
@@ -521,6 +525,15 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 
 	},
 
+
+	adjustBrightness: function(adjust) {
+		var newVal = this.config.brightness+adjust;
+
+		if (newVal >= 20 && newVal <= 100) {
+			this.config.brightness = newVal;
+			this.mainContainer.css('opacity', this.config.brightness/100);
+		}
+	},
 
 	transformHeading: function(heading) {
 		var val = parseInt((heading/22.5)+0.5);
