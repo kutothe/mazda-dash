@@ -804,36 +804,40 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 					displayVal = curRegion.speedTransform(value);
 				}
 
-				this.speedometerValue[0].innerHTML = displayVal;
+				if (isNaN(displayVal)) {
+					this.speedometerValue[0].innerHTML = '&nbsp;';
+				} else {
+					this.speedometerValue[0].innerHTML = displayVal;
 
-				if (!refreshOnly) {
-					this.totalSpeed += value;
+					if (!refreshOnly) {
+						this.totalSpeed += value;
 
-					if (this.totalSpeedTicks++ % 10 === 0) {
-						// update average speed
-						this.avgSpeed = Math.round(this.totalSpeed/this.totalSpeedTicks);
+						if (this.totalSpeedTicks++ % 10 === 0) {
+							// update average speed
+							this.avgSpeed = Math.round(this.totalSpeed/this.totalSpeedTicks);
+							if (curRegion.speedTransform) {
+								this.avgSpeedConValue[0].innerHTML = curRegion.speedTransform(this.avgSpeed);
+							} else {
+								this.avgSpeedConValue[0].innerHTML = this.avgSpeed;
+							}
+						}
+
+						if (value > this.topSpeed) {
+							this.topSpeed = value;
+							if (curRegion.speedTransform) {
+								this.topSpeedConValue[0].innerHTML = curRegion.speedTransform(value);
+							} else {
+								this.topSpeedConValue[0].innerHTML = value;
+							}
+						}
+					} else {
 						if (curRegion.speedTransform) {
 							this.avgSpeedConValue[0].innerHTML = curRegion.speedTransform(this.avgSpeed);
+							this.topSpeedConValue[0].innerHTML = curRegion.speedTransform(this.topSpeed);
 						} else {
 							this.avgSpeedConValue[0].innerHTML = this.avgSpeed;
+							this.topSpeedConValue[0].innerHTML = this.topSpeed;
 						}
-					}
-
-					if (value > this.topSpeed) {
-						this.topSpeed = value;
-						if (curRegion.speedTransform) {
-							this.topSpeedConValue[0].innerHTML = curRegion.speedTransform(value);
-						} else {
-							this.topSpeedConValue[0].innerHTML = value;
-						}
-					}
-				} else {
-					if (curRegion.speedTransform) {
-						this.avgSpeedConValue[0].innerHTML = curRegion.speedTransform(this.avgSpeed);
-						this.topSpeedConValue[0].innerHTML = curRegion.speedTransform(this.topSpeed);
-					} else {
-						this.avgSpeedConValue[0].innerHTML = this.avgSpeed;
-						this.topSpeedConValue[0].innerHTML = this.topSpeed;
 					}
 				}
 				break;
@@ -863,7 +867,7 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 			// fuel consumption average
 			case 4:
 				displayVal = value;
-				if (displayVal === 0) {
+				if (isNaN(displayVal) || displayVal === 0) {
 					displayVal = '&nbsp;';
 				} else {
 					if (curRegion.fuelConsTransform) {
@@ -897,13 +901,17 @@ CustomApplicationsHandler.register("app.multidash", new CustomApplication({
 
 			// GPS Altitude
 			case 7:
-				if (!isNaN(value)) {
-					displayVal = value;
+				displayVal = value;
+				if (isNaN(displayVal)) {
+					displayVal = '&nbsp;';
+				} else {
 					if (curRegion.altitudeTransform) {
 						displayVal = curRegion.altitudeTransform(displayVal);
 					}
-					this.altitudeValue[0].innerHTML = displayVal+'<span class="unit">'+curRegion.altitudeUnit+'</span>';
+					displayVal += '<span class="unit">'+curRegion.altitudeUnit+'</span>';
 				}
+
+				this.altitudeValue[0].innerHTML = displayVal;
 				break;
 
 			default:
